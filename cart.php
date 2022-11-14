@@ -100,19 +100,18 @@ if(isset($_GET['delete_all'])){
 
 <div class="container">
 
-<section class="shopping-cart">
+<section class="shopping-cart text-center">
 
-   <h1 class="heading">shopping cart</h1>
+   <h1 class="mt-5 ">Shopping Cart</h1>
 
-   <table>
+   <table class="table">
 
       <thead>
-         <th>image</th>
-         <th>name</th>
-         <th>price</th>
-         <th>quantity</th>
-         <th>total price</th>
-         <th>action</th>
+         <th colspan="2">Product</th>
+         <th>Unit Price</th>
+         <th>Quantity</th>
+         <th>Total Price</th>
+         <th>Actions</th>
       </thead>
 
       <tbody>
@@ -133,11 +132,11 @@ if(isset($_GET['delete_all'])){
                <form action="" method="post">
                   <input type="hidden" name="update_quantity_id"  value="<?php echo $fetch_cart['id']; ?>" >
                   <input type="number" name="update_quantity" min="1"  value="<?php echo $fetch_cart['quantity']; ?>" >
-                  <input type="submit" value="update" name="update_update_btn">
+                  <input type="submit" value="update" name="update_update_btn" class="btn btn-warning">
                </form>   
             </td>
             <td>$<?php echo $sub_total = number_format($fetch_cart['price'] * $fetch_cart['quantity']); ?>/-</td>
-            <td><a href="cart.php?remove=<?php echo $fetch_cart['id']; ?>" onclick="return confirm('remove item from cart?')" class="delete-btn"> <i class="fas fa-trash"></i> remove</a></td>
+            <td><a href="cart.php?remove=<?php echo $fetch_cart['id']; ?>" onclick="return confirm('remove item from cart?')" class="delete-btn btn btn-danger"> <i class="fas fa-trash"></i> remove</a></td>
          </tr>
          <?php
             $subtotal = $fetch_cart['price'] * $fetch_cart['quantity'];
@@ -147,19 +146,19 @@ if(isset($_GET['delete_all'])){
          };
          ?>
          <tr class="table-bottom">
-            <td><a href="products.php" class="option-btn" style="margin-top: 0;">continue shopping</a></td>
-            <td colspan="3">grand total</td>
-            <td>$<?php echo $grand_total; ?>/-</td>
-            <td><a href="cart.php?delete_all" onclick="return confirm('are you sure you want to delete all?');" class="delete-btn"> <i class="fas fa-trash"></i> delete all </a></td>
+            <td><a href="products.php" class="option-btn btn btn-primary" style="margin-top: 0;">continue shopping</a></td>
+            <td class="" colspan="3">Grand Total</td>
+            <td>$<?php echo number_format($grand_total); ?>/-</td>
+            <td><a href="cart.php?delete_all" onclick="return confirm('are you sure you want to delete all?');" class="delete-btn btn btn-danger"> <i class="fas fa-trash"></i> delete all </a></td>
          </tr>
 
       </tbody>
 
    </table>
 
-   <div class="checkout-btn">
-      <a href="checkout.php" class="btn <?= ($grand_total > 1)?'':'disabled'; ?>">procced to checkout</a>
-   </div>
+   
+    <a href="checkout.php" class="text-white mb-5 btn-success btn <?= ($grand_total > 1)?'':'disabled'; ?>">Procced to Checkout</a>
+   
 
 </section>
 

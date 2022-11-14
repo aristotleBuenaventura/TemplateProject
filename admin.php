@@ -138,37 +138,40 @@ if(isset($message)){
         </div>
     </div>
 
-    <div class="container">
+<div class="container">
 
-<section>
-
-<form action="" method="post" class="add-product-form" enctype="multipart/form-data">
-   <h3>add a new product</h3>
-   <input type="text" name="p_name" placeholder="enter the product name" class="box" required>
-   <input type="number" name="p_price" min="0" placeholder="enter the product price" class="box" required>
-   <input type="file" name="p_image" accept="image/png, image/jpg, image/jpeg" class="box" required>
-   <label for="cars">Category:</label>
-   <select name="category" id="cars">
-      <option value="Men">Men</option>
-      <option value="Women">Women</option>
-      <option value="Unisex">Unisex</option>
-      <option value="Kids">Kids</option>
-   </select>
-   <input type="submit" value="add the product" name="add_product" class="btn">
-</form>
-
-</section>
+<div class="row justify-content-center my-5">
+    <div class="col col-6 text-center">
+        <div class="border border-gray">
+            <form action="" method="post" class="add-product-form " enctype="multipart/form-data">
+                <h3 class="mt-3">New Product</h3>
+                <p>Name of the Watch: <input type="text" name="p_name" placeholder="Enter the Watch" class="box" required></p>
+                <p>Price: <input type="number" name="p_price" min="0" placeholder="Enter the Price" class="box" required>
+                <input type="file" name="p_image" accept="image/png, image/jpg, image/jpeg" class="box" required></p>
+                <label for="cars">Category:</label>
+                <select name="category" id="cars">
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Unisex">Unisex</option>
+                    <option value="Kids">Kids</option>
+                </select>
+                <div class="mt-2 mb-3">
+                    <input type="submit" value="add" name="add_product" class="btn btn-success">
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
 <section class="display-product-table">
 
-   <table>
+   <table class="table">
 
       <thead>
-         <th>product image</th>
-         <th>product name</th>
-         <th>product price</th>
-         <th>category</th>
-         <th>action</th>
+         <th colspan="2">Product</th>
+         <th>Unit Price</th>
+         <th>Category</th>
+         <th>Actions</th>
       </thead>
 
       <tbody>
@@ -185,8 +188,8 @@ if(isset($message)){
             <td>₱<?php echo $row['price']; ?>/-</td>
             <td><?php echo $row['category']; ?></td>
             <td>
-               <a href="admin.php?delete=<?php echo $row['id']; ?>" class="delete-btn" onclick="return confirm('are your sure you want to delete this?');"> <i class="fas fa-trash"></i> delete </a>
-               <a href="admin.php?edit=<?php echo $row['id']; ?>" class="option-btn"> <i class="fas fa-edit"></i> update </a>
+               <a href="admin.php?delete=<?php echo $row['id']; ?>" class="delete-btn btn btn-danger" onclick="return confirm('are your sure you want to delete this?');"> <i class="fas fa-trash"></i> delete </a>
+               <a href="admin.php?edit=<?php echo $row['id']; ?>" class="option-btn btn btn-warning"> <i class="fas fa-edit"></i> update </a>
             </td>
          </tr>
 
@@ -232,8 +235,10 @@ if(isset($message)){
 </section>
   
 
-    
-            
+</div>
+
+
+
 
     <!-- Footer  -->
 <div class="global border-top border-gray">
