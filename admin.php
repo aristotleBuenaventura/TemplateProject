@@ -77,32 +77,32 @@ if(isset($message)){
 
 ?>
 
-    <div class="container-fluid box">
+<div class="container-fluid box">
         <nav class="navbar navbar-expand-sm navbar-light bg-warning  navigation">
             <div class="container links">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item me-2">
-                        <a href="Home">Home</a>
+                        <a href="index.php">Home</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="Home">Products</a>
+                        <a href="products.php">Products</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="Home">Inquiry</a>
+                        <a href="inquiry.php">Inquiry</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="Home">About</a>
+                        <a href="about.php">About</a>
                     </li>
                     <li class="nav-item me-2">
-                      <a href="Home">Team</a>
+                      <a href="team.php">Team</a>
                   </li>
                   <li class="nav-item me-2">
-                    <a href="Home">Contact</a>
+                    <a href="contact.php">Contact</a>
                 </li>
                 </ul>
                 <ul class="navbar-nav justify-content-end">
                     <li class="nav-item me-2">
-                        <a href="Home">Login</a>
+                        <a href="login.php">Login</a>
                     </li>
                 </ul>
             </div>
@@ -114,7 +114,7 @@ if(isset($message)){
         <div class="container">
             <div class="row ">
                 <div class="col col-12 col-sm-12 col-md-4 mt-2 mb-2">
-                    <a href="#"><img class="logo" src="images/logo-no-background.png" alt="" ></a>
+                    <a href="index.php"><img class="logo" src="images/logo-no-background.png" alt="" ></a>
                 </div>
                 <div class="col col-6 col-sm-6 col-md-4 align-self-center align-items-center mt-2 mb-3">
                     <div class="input-group rounded ">

@@ -1,4 +1,60 @@
+<?php
+session_start();
 
+@include 'config.php';
+
+if(isset($_POST['order_btn'])){
+
+   $name = $_POST['name'];
+   $number = $_POST['number'];
+   $email = $_POST['email'];
+   $method = $_POST['method'];
+   $flat = $_POST['flat'];
+   $street = $_POST['street'];
+   $city = $_POST['city'];
+   $state = $_POST['state'];
+   $country = $_POST['country'];
+   $pin_code = $_POST['pin_code'];
+
+   $cart_query = mysqli_query($conn, "SELECT * FROM `cart`");
+   $price_total = 0;
+   if(mysqli_num_rows($cart_query) > 0){
+      while($product_item = mysqli_fetch_assoc($cart_query)){
+         $product_name[] = $product_item['name'] .' ('. $product_item['quantity'] .') ';
+         $product_price = number_format($product_item['price'] * $product_item['quantity']);
+         $price_total += $product_price;
+      };
+   };
+
+   $total_product = implode(', ',$product_name);
+   $detail_query = mysqli_query($conn, "INSERT INTO `order`(name, number, email, method, flat, street, city, state, country, pin_code, total_products, total_price) VALUES('$name','$number','$email','$method','$flat','$street','$city','$state','$country','$pin_code','$total_product','$price_total')") or die('query failed');
+
+   if($cart_query && $detail_query){
+      echo "
+      <div class='order-message-container'>
+      <div class='message-container'>
+         <h3>thank you for shopping!</h3>
+         <div class='order-detail'>
+            <span>".$total_product."</span>
+            <span class='total'> total : $".$price_total."/-  </span>
+         </div>
+         <div class='customer-details'>
+            <p> your name : <span>".$name."</span> </p>
+            <p> your number : <span>".$number."</span> </p>
+            <p> your email : <span>".$email."</span> </p>
+            <p> your address : <span>".$flat.", ".$street.", ".$city.", ".$state.", ".$country." - ".$pin_code."</span> </p>
+            <p> your payment mode : <span>".$method."</span> </p>
+            <p>(*pay when product arrives*)</p>
+         </div>
+            <a href='products.php' class='btn'>continue shopping</a>
+         </div>
+      </div>
+      ";
+   }
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,32 +67,32 @@
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
-    <div class="container-fluid box">
+<div class="container-fluid box">
         <nav class="navbar navbar-expand-sm navbar-light bg-warning  navigation">
             <div class="container links">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item me-2">
-                        <a href="Home">Home</a>
+                        <a href="index.php">Home</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="Home">Products</a>
+                        <a href="products.php">Products</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="Home">Inquiry</a>
+                        <a href="inquiry.php">Inquiry</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="Home">About</a>
+                        <a href="about.php">About</a>
                     </li>
                     <li class="nav-item me-2">
-                      <a href="Home">Team</a>
+                      <a href="team.php">Team</a>
                   </li>
                   <li class="nav-item me-2">
-                    <a href="Home">Contact</a>
+                    <a href="contact.php">Contact</a>
                 </li>
                 </ul>
                 <ul class="navbar-nav justify-content-end">
                     <li class="nav-item me-2">
-                        <a href="Home">Login</a>
+                        <a href="login.php">Login</a>
                     </li>
                 </ul>
             </div>
@@ -48,7 +104,7 @@
         <div class="container">
             <div class="row ">
                 <div class="col col-12 col-sm-12 col-md-4 mt-2 mb-2">
-                    <a href="#"><img class="logo" src="images/logo-no-background.png" alt="" ></a>
+                    <a href="index.php"><img class="logo" src="images/logo-no-background.png" alt="" ></a>
                 </div>
                 <div class="col col-6 col-sm-6 col-md-4 align-self-center align-items-center mt-2 mb-3">
                     <div class="input-group rounded ">
@@ -61,18 +117,65 @@
                         
                     </div>
                 </div>
-                <div class="col col-6 col-sm-6 col-md-4 mt-3 mb-3 float-right links d-flex justify-content-end">
-                    <a href="#">
+                <?php
+                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+                    $row_count = mysqli_num_rows($select_rows);
+                ?>
+                <div class="position-relative col col-6 col-sm-6 col-md-4 mt-3 mb-3 float-right links d-flex justify-content-end">
+                    <a href="cart.php">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
                         <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
                       </svg>
                     </a>
+                    <?php if($row_count > 0) 
+                        {
+                        ?>
+                        <span class="position-absolute top-0 start-100 translate-middle px-2 bg-danger border border-light rounded-circle">
+                        <?php
+                        echo $row_count;
+                        ?>
+                        </span>
+                            <?php
+                        }
+                    ?> 
                 </div>
             </div>
         </div>
     </div>
 
-  
+ <div class="container mb-5">
+    <h3 class="text-center mt-4 mb-3">Complete your Order</h3>
+    <div class="row justify-content-center">
+        <?php
+            $select_cart = mysqli_query($conn, "SELECT * FROM `cart`");
+            $total = 0;
+            $grand_total = 0;
+            $count = 1;
+            if(mysqli_num_rows($select_cart) > 0){
+                while($fetch_cart = mysqli_fetch_assoc($select_cart)){
+                $total_price = number_format($fetch_cart['price'] * $fetch_cart['quantity']);
+        ?>
+        <div class="col col-6 col-md-4 mb-3 ">
+            <div class="text-center"><img src="uploaded_img/<?php echo $fetch_cart['image']; ?>" height="100" alt=""></div>
+            <div><?= $count ?>. <?= $fetch_cart['name']; ?> (<?= $fetch_cart['quantity']; ?> piece/s.)</div>
+        </div>
+        <?php
+                $count++;
+            }
+        }else{
+            echo "<div class='display-order'><span>Your cart is empty!</span></div>";
+        }
+        ?>
+        <h4 class="grand-total text-center text-lg"> Grand Total : ₱<?= number_format($_SESSION['total']); ?></h4>
+        
+
+        <div id="smart-button-container" class="mt-4">
+            <div style="text-align: center;">
+                <div id="paypal-button-container"></div>
+            </div>
+        </div>
+    </div>
+ </div>
 
     
             
@@ -136,6 +239,50 @@
   </div>
 
 
+  <script src="https://www.paypal.com/sdk/js?client-id=AeDTpoaJbhsPiqF5ST2NBlUvOTM9u4dgvVZycMEmGmwCPLmriWcXb1v-NoZVY-rzp9EcJ9_zoIoiMcr9&currency=PHP" data-sdk-integration-source="button-factory"></script>
+  <script>
+  var total = parseInt('<?php echo $_SESSION['total']; ?>');
+</script>
+  <script>
+  function initPayPalButton() {
+    paypal.Buttons({
+      style: {
+        shape: 'pill',
+        color: 'silver',
+        layout: 'vertical',
+        label: 'pay',
+        
+      },
+
+      createOrder: function(data, actions) {
+        return actions.order.create({
+          purchase_units: [{"amount":{"currency_code":"PHP","value":total}}]
+        });
+      },
+
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(orderData) {
+          
+          // Full available details
+          console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+
+          // Show a success message within this page, e.g.
+          const element = document.getElementById('paypal-button-container');
+         
+        //   window.location.href = "success.php?amount=" + total + "&id=" + id;
+
+          // Or go to another URL:  actions.redirect('thank_you.html');
+          
+        });
+      },
+
+      onError: function(err) {
+        console.log(err);
+      }
+    }).render('#paypal-button-container');
+  }
+  initPayPalButton();
+</script>    
     <script src="https://code.jquery.com/jquery-3.6.0.js"
     integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"></script>

@@ -3,28 +3,7 @@ session_start();
 
 @include 'config.php';
 
-if(isset($_POST['update_update_btn'])){
-   $update_value = $_POST['update_quantity'];
-   $update_id = $_POST['update_quantity_id'];
-   $update_quantity_query = mysqli_query($conn, "UPDATE `cart` SET quantity = '$update_value' WHERE id = '$update_id'");
-   if($update_quantity_query){
-      header('location:cart.php');
-   };
-};
-
-if(isset($_GET['remove'])){
-   $remove_id = $_GET['remove'];
-   mysqli_query($conn, "DELETE FROM `cart` WHERE id = '$remove_id'");
-   header('location:cart.php');
-};
-
-if(isset($_GET['delete_all'])){
-   mysqli_query($conn, "DELETE FROM `cart`");
-   header('location:cart.php');
-}
-
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -36,9 +15,11 @@ if(isset($_GET['delete_all'])){
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+
 </head>
 <body>
-<div class="container-fluid box">
+    <div class="container-fluid box">
         <nav class="navbar navbar-expand-sm navbar-light bg-warning  navigation">
             <div class="container links">
                 <ul class="navbar-nav me-auto">
@@ -113,72 +94,89 @@ if(isset($_GET['delete_all'])){
             </div>
         </div>
     </div>
+    
+<section class="my-5">
+  <div class="container">
+    <div class="row d-flex justify-content-center align-items-center h-50">
+      <div class="col-lg-12 col-xl-11">
+        <div class="card text-black" style="border-radius: 25px;">
+          <div class="card-body p-md-5">
+            <div class="row justify-content-center">
+              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-<div class="container">
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4">Sign up</p>
 
-<section class="shopping-cart text-center">
+                <form class="mx-1 mx-md-4">
 
-   <h1 class="mt-5 ">Shopping Cart</h1>
+                  <div class="d-flex flex-row align-items-center ">
+                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" id="form3Example1c" class="form-control mb-3" placeholder="Username"/>
+                    </div>
+                  </div>
 
-   <table class="table">
+                  <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="email" id="form3Example3c" class="form-control mb-3" placeholder="Email" />
+                    </div>
+                  </div>
 
-      <thead>
-         <th colspan="2">Product</th>
-         <th>Unit Price</th>
-         <th>Quantity</th>
-         <th>Total Price</th>
-         <th>Actions</th>
-      </thead>
+                  <div class="d-flex flex-row align-items-center">
+                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" id="form3Example4c" class="form-control mb-3" placeholder="First Name" />
+                    </div>
+                  </div>
 
-      <tbody>
+                  <div class="d-flex flex-row align-items-center ">
+                    <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" id="form3Example4cd" class="form-control mb-3" placeholder="Last Name" />
+                    </div>
+                  </div>
 
-         <?php 
-         
-         $select_cart = mysqli_query($conn, "SELECT * FROM `cart`");
-         $grand_total = 0;
-         if(mysqli_num_rows($select_cart) > 0){
-            while($fetch_cart = mysqli_fetch_assoc($select_cart)){
-         ?>
+                  <div class="d-flex flex-row align-items-center ">
+                    <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="password" id="form3Example4cd" class="form-control mb-3" placeholder="Password" />
+                    </div>
+                  </div>
 
-         <tr>
-            <td><img src="uploaded_img/<?php echo $fetch_cart['image']; ?>" height="100" alt=""></td>
-            <td><?php echo $fetch_cart['name']; ?></td>
-            <td>$<?php echo number_format($fetch_cart['price']); ?>/-</td>
-            <td>
-               <form action="" method="post">
-                  <input type="hidden" name="update_quantity_id"  value="<?php echo $fetch_cart['id']; ?>" >
-                  <input type="number" name="update_quantity" min="1"  value="<?php echo $fetch_cart['quantity']; ?>" >
-                  <input type="submit" value="update" name="update_update_btn" class="btn btn-warning">
-               </form>   
-            </td>
-            <td>$<?php echo $sub_total = number_format($fetch_cart['price'] * $fetch_cart['quantity']); ?>/-</td>
-            <td><a href="cart.php?remove=<?php echo $fetch_cart['id']; ?>" onclick="return confirm('remove item from cart?')" class="delete-btn btn btn-danger"> <i class="fas fa-trash"></i> remove</a></td>
-         </tr>
-         <?php
-            $subtotal = $fetch_cart['price'] * $fetch_cart['quantity'];
-            $grand_total += $subtotal;  
-            };
-            $_SESSION['total'] = $grand_total;
-         };
-         ?>
-         <tr class="table-bottom">
-            <td><a href="products.php" class="option-btn btn btn-primary" style="margin-top: 0;">continue shopping</a></td>
-            <td class="" colspan="3">Grand Total</td>
-            <td>$<?php echo number_format($grand_total); ?>/-</td>
-            <td><a href="cart.php?delete_all" onclick="return confirm('are you sure you want to delete all?');" class="delete-btn btn btn-danger"> <i class="fas fa-trash"></i> delete all </a></td>
-         </tr>
+                  <div class="d-flex flex-row align-items-center ">
+                    <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="password" id="form3Example4cd" class="form-control mb-3" placeholder="Confirm Password" />
+                    </div>
+                  </div>
 
-      </tbody>
+                  <div class="form-check d-flex justify-content-center me-3 mb-3">
+                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" required />
+                    <label class="form-check-label" for="form2Example3">
+                    I agree all statements in <a href="#!">Terms and Condition</a>
+                    </label>
+                  </div>
 
-   </table>
+                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                    <button type="button" class="btn btn-primary btn-lg">Register</button>
+                  </div>
 
-   
-    <a href="checkout.php" class="text-white mb-5 btn-success btn <?= ($grand_total > 1)?'':'disabled'; ?>">Procced to Checkout</a>
-   
+                </form>
 
+              </div>
+              <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2 d-flex justify-content-center">
+
+                <img src="images/signup-image.jpg" class="img-fluid ">
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-</div>
 
     
             
