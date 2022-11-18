@@ -2,6 +2,8 @@
 
 @include 'config.php';
 
+session_start();
+
 if(isset($_POST['add_product'])){
    $p_name = $_POST['p_name'];
    $p_price = $_POST['p_price'];
@@ -53,6 +55,29 @@ if(isset($_POST['update_product'])){
 
 }
 
+
+if (isset($_SESSION['email'])){
+    $email = $_SESSION['email'];
+  } else {
+    $email = "";
+  }
+
+  $result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+  $resultCheck = mysqli_num_rows($result);
+
+  $roleDB = "";
+  if($resultCheck > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $emailDB = $row['email'];
+      $roleDB = $row['role'];
+    }
+  }
+
+  if ( $roleDB == 'user' || $email == "") :
+    header('Location: index.php');
+    exit();
+  endif;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -101,9 +126,21 @@ if(isset($message)){
                 </li>
                 </ul>
                 <ul class="navbar-nav justify-content-end">
-                    <li class="nav-item me-2">
-                        <a href="login.php">Login</a>
-                    </li>
+                    <?php 
+                        if($email != '' ){
+                    ?>
+                        <li class="nav-item me-2">
+                                <a href="logout.php">Logout</a>
+                            </li>
+                        <?php
+                        } else {
+                    ?>
+                        <li class="nav-item me-2">
+                            <a href="login.php">Login</a>
+                        </li>
+                    <?php
+                        }
+                    ?>
                 </ul>
             </div>
 

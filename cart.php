@@ -23,6 +23,24 @@ if(isset($_GET['delete_all'])){
    header('location:cart.php');
 }
 
+
+
+if (isset($_SESSION['email'])){
+    $email = $_SESSION['email'];
+  } else {
+    $email = "";
+  }
+
+  $result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+  $resultCheck = mysqli_num_rows($result);
+
+  $roleDB = "";
+  if($resultCheck > 0) {
+    while($row = mysqli_fetch_assoc($result)) {
+      $emailDB = $row['email'];
+      $roleDB = $row['role'];
+    }
+  }
 ?>
 
 
@@ -49,9 +67,6 @@ if(isset($_GET['delete_all'])){
                         <a href="products.php">Products</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="inquiry.php">Inquiry</a>
-                    </li>
-                    <li class="nav-item me-2">
                         <a href="about.php">About</a>
                     </li>
                     <li class="nav-item me-2">
@@ -62,9 +77,21 @@ if(isset($_GET['delete_all'])){
                 </li>
                 </ul>
                 <ul class="navbar-nav justify-content-end">
-                    <li class="nav-item me-2">
-                        <a href="login.php">Login</a>
-                    </li>
+                    <?php 
+                        if($email != '' ){
+                    ?>
+                        <li class="nav-item me-2">
+                                <a href="logout.php">Logout</a>
+                            </li>
+                        <?php
+                        } else {
+                    ?>
+                        <li class="nav-item me-2">
+                            <a href="login.php">Login</a>
+                        </li>
+                    <?php
+                        }
+                    ?>
                 </ul>
             </div>
 
@@ -89,7 +116,7 @@ if(isset($_GET['delete_all'])){
                     </div>
                 </div>
                 <?php
-                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart` where email = '$email' and payment = 'Unpaid'") or die('query failed');
                     $row_count = mysqli_num_rows($select_rows);
                 ?>
                 <div class="position-relative col col-6 col-sm-6 col-md-4 mt-3 mb-3 float-right links d-flex justify-content-end">
@@ -133,17 +160,17 @@ if(isset($_GET['delete_all'])){
       <tbody>
 
          <?php 
-         
-         $select_cart = mysqli_query($conn, "SELECT * FROM `cart`");
+         $select_cart = mysqli_query($conn, "SELECT * FROM `cart` where email = '$email' and payment = 'Unpaid'");
          $grand_total = 0;
          if(mysqli_num_rows($select_cart) > 0){
             while($fetch_cart = mysqli_fetch_assoc($select_cart)){
          ?>
 
          <tr>
+            
             <td><img src="uploaded_img/<?php echo $fetch_cart['image']; ?>" height="100" alt=""></td>
             <td><?php echo $fetch_cart['name']; ?></td>
-            <td>$<?php echo number_format($fetch_cart['price']); ?>/-</td>
+            <td>₱<?php echo number_format($fetch_cart['price']); ?>/-</td>
             <td>
                <form action="" method="post">
                   <input type="hidden" name="update_quantity_id"  value="<?php echo $fetch_cart['id']; ?>" >
@@ -151,7 +178,7 @@ if(isset($_GET['delete_all'])){
                   <input type="submit" value="update" name="update_update_btn" class="btn btn-warning">
                </form>   
             </td>
-            <td>$<?php echo $sub_total = number_format($fetch_cart['price'] * $fetch_cart['quantity']); ?>/-</td>
+            <td>₱<?php echo $sub_total = number_format($fetch_cart['price'] * $fetch_cart['quantity']); ?></td>
             <td><a href="cart.php?remove=<?php echo $fetch_cart['id']; ?>" onclick="return confirm('remove item from cart?')" class="delete-btn btn btn-danger"> <i class="fas fa-trash"></i> remove</a></td>
          </tr>
          <?php
@@ -164,7 +191,7 @@ if(isset($_GET['delete_all'])){
          <tr class="table-bottom">
             <td><a href="products.php" class="option-btn btn btn-primary" style="margin-top: 0;">continue shopping</a></td>
             <td class="" colspan="3">Grand Total</td>
-            <td>$<?php echo number_format($grand_total); ?>/-</td>
+            <td>₱<?php echo number_format($grand_total); ?>/-</td>
             <td><a href="cart.php?delete_all" onclick="return confirm('are you sure you want to delete all?');" class="delete-btn btn btn-danger"> <i class="fas fa-trash"></i> delete all </a></td>
          </tr>
 

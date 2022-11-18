@@ -3,6 +3,23 @@ session_start();
 
 @include 'config.php';
 
+if (isset($_SESSION['email'])){
+  $email = $_SESSION['email'];
+} else {
+  $email = "";
+}
+
+$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+$resultCheck = mysqli_num_rows($result);
+
+$roleDB = "";
+if($resultCheck > 0) {
+  while($row = mysqli_fetch_assoc($result)) {
+    $emailDB = $row['email'];
+    $roleDB = $row['role'];
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -28,9 +45,6 @@ session_start();
                         <a href="products.php">Products</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="inquiry.php">Inquiry</a>
-                    </li>
-                    <li class="nav-item me-2">
                         <a href="about.php">About</a>
                     </li>
                     <li class="nav-item me-2">
@@ -41,9 +55,21 @@ session_start();
                 </li>
                 </ul>
                 <ul class="navbar-nav justify-content-end">
-                    <li class="nav-item me-2">
-                        <a href="login.php">Login</a>
-                    </li>
+                    <?php 
+                        if($email != '' ){
+                    ?>
+                        <li class="nav-item me-2">
+                                <a href="logout.php">Logout</a>
+                            </li>
+                        <?php
+                        } else {
+                    ?>
+                        <li class="nav-item me-2">
+                            <a href="login.php">Login</a>
+                        </li>
+                    <?php
+                        }
+                    ?>
                 </ul>
             </div>
 
@@ -68,7 +94,7 @@ session_start();
                     </div>
                 </div>
                 <?php
-                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart` where email = '$email' and payment = 'Unpaid'") or die('query failed');
                     $row_count = mysqli_num_rows($select_rows);
                 ?>
                 <div class="position-relative col col-6 col-sm-6 col-md-4 mt-3 mb-3 float-right links d-flex justify-content-end">

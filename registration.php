@@ -3,6 +3,73 @@ session_start();
 
 @include 'config.php';
 
+error_reporting(0);
+
+    
+
+if (isset($_SESSION['username'])) {
+    header("Location: index.php");
+}
+
+if (isset($_POST['submit'])) {
+    session_start();
+    
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $password = md5($_POST['password']);
+    $cpassword = md5($_POST['cpassword']); 
+    $role = "user";
+
+    $_SESSION["firstname"] = $firstname;
+    $_SESSION["lastname"] = $lastname;
+    $_SESSION["email"] = $email;
+
+
+    if ($password === $cpassword) {
+        $users = getUserByEmail($conn, $email);
+        if ($users->num_rows === 0) {
+            $sql = "INSERT INTO registration (username, email, firstname, lastname, password, role)
+                    VALUES ('$username', '$email', '$firstname', '$lastname','$password', '$role')";
+            $result = mysqli_query($conn, $sql);
+            if ($result) {
+                header('Location: login.php');
+            } else {
+                echo "<script>alert('Woops! Something Went Wrong.')</script>";
+            }
+        } else {
+            echo "<script>alert('Woops! Email Already Exists.')</script>";
+
+        }
+
+    } else {
+        echo "<script>alert('Password Not Matched.')</script>";
+    }
+}
+
+function getUserByEmail($conn, $email) {
+    $sql = "SELECT * FROM registration WHERE email='$email'";
+    return mysqli_query($conn, $sql);
+}
+
+if (isset($_SESSION['email'])){
+  $email = $_SESSION['email'];
+} else {
+  $email = "";
+}
+
+$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+$resultCheck = mysqli_num_rows($result);
+
+$roleDB = "";
+if($resultCheck > 0) {
+  while($row = mysqli_fetch_assoc($result)) {
+    $emailDB = $row['email'];
+    $roleDB = $row['role'];
+  }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -30,9 +97,6 @@ session_start();
                         <a href="products.php">Products</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="inquiry.php">Inquiry</a>
-                    </li>
-                    <li class="nav-item me-2">
                         <a href="about.php">About</a>
                     </li>
                     <li class="nav-item me-2">
@@ -43,9 +107,21 @@ session_start();
                 </li>
                 </ul>
                 <ul class="navbar-nav justify-content-end">
-                    <li class="nav-item me-2">
-                        <a href="login.php">Login</a>
-                    </li>
+                    <?php 
+                        if($email != '' ){
+                    ?>
+                        <li class="nav-item me-2">
+                                <a href="logout.php">Logout</a>
+                            </li>
+                        <?php
+                        } else {
+                    ?>
+                        <li class="nav-item me-2">
+                            <a href="login.php">Login</a>
+                        </li>
+                    <?php
+                        }
+                    ?>
                 </ul>
             </div>
 
@@ -70,7 +146,7 @@ session_start();
                     </div>
                 </div>
                 <?php
-                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart` where email = '$email' and payment = 'Unpaid'") or die('query failed');
                     $row_count = mysqli_num_rows($select_rows);
                 ?>
                 <div class="position-relative col col-6 col-sm-6 col-md-4 mt-3 mb-3 float-right links d-flex justify-content-end">
@@ -106,47 +182,47 @@ session_start();
 
                 <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4">Sign up</p>
 
-                <form class="mx-1 mx-md-4">
+                <form class="mx-1 mx-md-4" action="" method="post">
 
                   <div class="d-flex flex-row align-items-center ">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text" id="form3Example1c" class="form-control mb-3" placeholder="Username"/>
+                      <input type="text" id="username" name="username" class="form-control mb-3" placeholder="Username"/>
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center">
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="email" id="form3Example3c" class="form-control mb-3" placeholder="Email" />
+                      <input type="email" id="email" name="email" class="form-control mb-3" placeholder="Email" />
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text" id="form3Example4c" class="form-control mb-3" placeholder="First Name" />
+                      <input type="text" id="First Name" name="firstname" class="form-control mb-3" placeholder="First Name" />
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center ">
                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text" id="form3Example4cd" class="form-control mb-3" placeholder="Last Name" />
+                      <input type="text" id="Last Name" name="firstname" class="form-control mb-3" placeholder="Last Name" />
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center ">
                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="password" id="form3Example4cd" class="form-control mb-3" placeholder="Password" />
+                      <input type="password" id="password" name="password" class="form-control mb-3" placeholder="Password" />
                     </div>
                   </div>
 
                   <div class="d-flex flex-row align-items-center ">
                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="password" id="form3Example4cd" class="form-control mb-3" placeholder="Confirm Password" />
+                      <input type="password" id="confirm password" name="cpassword" class="form-control mb-3" placeholder="Confirm Password" />
                     </div>
                   </div>
 
@@ -158,7 +234,7 @@ session_start();
                   </div>
 
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="button" class="btn btn-primary btn-lg">Register</button>
+                    <input type="submit" name="submit" class="btn btn-primary btn-lg"></input>
                   </div>
 
                 </form>

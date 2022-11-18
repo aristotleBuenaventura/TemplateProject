@@ -3,6 +3,7 @@ session_start();
 
 @include 'config.php';
 
+
 if(isset($_POST['order_btn'])){
 
    $name = $_POST['name'];
@@ -16,7 +17,7 @@ if(isset($_POST['order_btn'])){
    $country = $_POST['country'];
    $pin_code = $_POST['pin_code'];
 
-   $cart_query = mysqli_query($conn, "SELECT * FROM `cart`");
+   $cart_query = mysqli_query($conn, "SELECT * FROM `cart` where email = '$email'");
    $price_total = 0;
    if(mysqli_num_rows($cart_query) > 0){
       while($product_item = mysqli_fetch_assoc($cart_query)){
@@ -54,6 +55,23 @@ if(isset($_POST['order_btn'])){
 
 }
 
+if (isset($_SESSION['email'])){
+  $email = $_SESSION['email'];
+} else {
+  $email = "";
+}
+
+$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+$resultCheck = mysqli_num_rows($result);
+
+$roleDB = "";
+if($resultCheck > 0) {
+  while($row = mysqli_fetch_assoc($result)) {
+    $emailDB = $row['email'];
+    $roleDB = $row['role'];
+  }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,9 +96,6 @@ if(isset($_POST['order_btn'])){
                         <a href="products.php">Products</a>
                     </li>
                     <li class="nav-item me-2">
-                        <a href="inquiry.php">Inquiry</a>
-                    </li>
-                    <li class="nav-item me-2">
                         <a href="about.php">About</a>
                     </li>
                     <li class="nav-item me-2">
@@ -91,9 +106,21 @@ if(isset($_POST['order_btn'])){
                 </li>
                 </ul>
                 <ul class="navbar-nav justify-content-end">
-                    <li class="nav-item me-2">
-                        <a href="login.php">Login</a>
-                    </li>
+                    <?php 
+                        if($email != '' ){
+                    ?>
+                        <li class="nav-item me-2">
+                                <a href="logout.php">Logout</a>
+                            </li>
+                        <?php
+                        } else {
+                    ?>
+                        <li class="nav-item me-2">
+                            <a href="login.php">Login</a>
+                        </li>
+                    <?php
+                        }
+                    ?>
                 </ul>
             </div>
 
@@ -118,7 +145,7 @@ if(isset($_POST['order_btn'])){
                     </div>
                 </div>
                 <?php
-                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart` where email = '$email' and payment = 'Unpaid'") or die('query failed');
                     $row_count = mysqli_num_rows($select_rows);
                 ?>
                 <div class="position-relative col col-6 col-sm-6 col-md-4 mt-3 mb-3 float-right links d-flex justify-content-end">
@@ -147,7 +174,7 @@ if(isset($_POST['order_btn'])){
     <h3 class="text-center mt-4 mb-3">Complete your Order</h3>
     <div class="row justify-content-center">
         <?php
-            $select_cart = mysqli_query($conn, "SELECT * FROM `cart`");
+            $select_cart = mysqli_query($conn, "SELECT * FROM `cart` where email = '$email' and payment = 'Unpaid'");
             $total = 0;
             $grand_total = 0;
             $count = 1;
@@ -242,6 +269,7 @@ if(isset($_POST['order_btn'])){
   <script src="https://www.paypal.com/sdk/js?client-id=AeDTpoaJbhsPiqF5ST2NBlUvOTM9u4dgvVZycMEmGmwCPLmriWcXb1v-NoZVY-rzp9EcJ9_zoIoiMcr9&currency=PHP" data-sdk-integration-source="button-factory"></script>
   <script>
   var total = parseInt('<?php echo $_SESSION['total']; ?>');
+
 </script>
   <script>
   function initPayPalButton() {
@@ -269,7 +297,7 @@ if(isset($_POST['order_btn'])){
           // Show a success message within this page, e.g.
           const element = document.getElementById('paypal-button-container');
          
-        //   window.location.href = "success.php?amount=" + total + "&id=" + id;
+          window.location.href = "success.php?amount=" + total;
 
           // Or go to another URL:  actions.redirect('thank_you.html');
           

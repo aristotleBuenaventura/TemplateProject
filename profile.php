@@ -1,59 +1,28 @@
 <?php
+session_start();
 
 @include 'config.php';
 
-session_start();
-
 if (isset($_SESSION['email'])){
-    $email = $_SESSION['email'];
-  } else {
-    $email = "";
-  }
-
-if(isset($_POST['add_to_cart'])){
-
-   $product_name = $_POST['product_name'];
-   $product_price = $_POST['product_price'];
-   $product_image = $_POST['product_image'];
-   $product_quantity = 1;
-
-   $select_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_name' and payment = 'Unpaid'");
-
-   if (isset($_SESSION['email'])){ 
-       if(mysqli_num_rows($select_cart) > 0){
-          $message[] = 'product already added to cart';
-       }else{
-          $insert_product = mysqli_query($conn, "INSERT INTO `cart`(name, price, image, quantity, email, payment) VALUES('$product_name', '$product_price', '$product_image', '$product_quantity','$email','Unpaid')");
-          $message[] = 'product added to cart succesfully';
-       }
-   } else {
-    ?>
-    <script type="text/javascript">
-        alert("Please Log in first!");
-        window.location.href = "login.php";
-    </script>
-    <?php
-   }
-   
-
+  $email = $_SESSION['email'];
+} else {
+  $email = "";
 }
 
-if (isset($_SESSION['email'])){
-    $email = $_SESSION['email'];
-  } else {
-    $email = "";
-  }
+$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+$resultCheck = mysqli_num_rows($result);
 
-  $result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
-  $resultCheck = mysqli_num_rows($result);
-
-  $roleDB = "";
-  if($resultCheck > 0) {
+if($resultCheck > 0) {
     while($row = mysqli_fetch_assoc($result)) {
+      $userDB = $row['username'];
       $emailDB = $row['email'];
+      $firstnameDB = $row['firstname'];
+      $lastnameDB = $row['lastname'];
       $roleDB = $row['role'];
     }
   }
+
+
 
 ?>
 
@@ -69,16 +38,53 @@ if (isset($_SESSION['email'])){
     <link rel="stylesheet" href="css/index.css">
 </head>
 <body>
+<style>
+body {
+    background: rgb(19,20,22)
+}
 
-<?php
+.form-control:focus {
+    box-shadow: none;
+    border-color: #BA68C8
+}
 
-if(isset($message)){
-   foreach($message as $message){
-      echo '<div class="message"><span>'.$message.'</span> <i class="fas fa-times" onclick="this.parentElement.style.display = `none`;"></i> </div>';
-   };
-};
+.profile-button {
+    background: rgb(99, 39, 120);
+    box-shadow: none;
+    border: none
+}
 
-?>
+.profile-button:hover {
+    background: #682773
+}
+
+.profile-button:focus {
+    background: #682773;
+    box-shadow: none
+}
+
+.profile-button:active {
+    background: #682773;
+    box-shadow: none
+}
+
+.back:hover {
+    color: #682773;
+    cursor: pointer
+}
+
+.labels {
+    font-size: 11px
+}
+
+.add-experience:hover {
+    background: #BA68C8;
+    color: #fff;
+    cursor: pointer;
+    border: solid 1px #BA68C8
+}
+</style>
+
     <div class="container-fluid box">
         <nav class="navbar navbar-expand-sm navbar-light bg-warning  navigation">
             <div class="container links">
@@ -164,135 +170,87 @@ if(isset($message)){
         </div>
     </div>
 
-<div class="container mt-4 mb-4">
-    <div class="row">
-        <h3>Men</h3>
-    <?php
-      
-      $select_products = mysqli_query($conn, "SELECT * FROM `products`");
-      if(mysqli_num_rows($select_products) > 0 ){
-         while($fetch_product = mysqli_fetch_assoc($select_products)){
-            if($fetch_product['category'] == 'Men') {
-      ?>
-        <div class="col col-6 col-lg-3 text-center">
-            <div class="border border-gray productBorder">
-            <form action="" method="post">
-                    <img src="uploaded_img/<?php echo $fetch_product['image']; ?>" alt="" height="150px">
-                    <h3 ><?php echo $fetch_product['name']; ?></h3>
-                    <div >₱<?php echo number_format($fetch_product['price']); ?>/-</div>
-                    <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
-                    <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
-                    <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
-                    <input type="submit" class="btn btn-warning mb-3" value="add to cart" name="add_to_cart">
-            </form>
 
+    <div class="container rounded bg-white mt-5 mb-5">
+    <div class="row">
+        <div class="col-md-3 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg"><span class="font-weight-bold"><?php echo $userDB; ?></span><span class="text-black-50"><?php echo $emailDB; ?></span><span> </span></div>
+        </div>
+        <div class="col-md-5 border-right">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-md-6"><label class="labels">Name</label><input type="text" class="form-control" placeholder="first name" value="<?php echo $firstnameDB; ?>"></div>
+                    <div class="col-md-6"><label class="labels">Surname</label><input type="text" class="form-control" value="<?php echo $lastnameDB; ?>" placeholder="surname"></div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="enter phone number" value=""></div>
+                    <div class="col-md-12"><label class="labels">Address Line 1</label><input type="text" class="form-control" placeholder="enter address line 1" value=""></div>
+                    <div class="col-md-12"><label class="labels">Address Line 2</label><input type="text" class="form-control" placeholder="enter address line 2" value=""></div>
+                </div>
+                <div class="mt-5 text-center"><button class="btn btn-primary profile-button" type="button">Save Profile</button></div>
             </div>
         </div>
-        <?php
-            };
-         };
-      };
-      ?>  
-    </div>
-</div>
+        <div class="col-md-4">
+            <div class="p-3 py-5">
+                <div class="border-bottom border-dark mb-3 font-weight-bold">
+                  <h4>Transaction History</h4>
+                </div>
+                <?php
+                     $res=mysqli_query($conn,"select * from cart where email = '$email'");
+                     $count=1;
+                     while($row=mysqli_fetch_array($res))
+                     {
+                       if($row['payment'] == 'Paid'){
+                        echo "<div class='border-bottom border-dark mb-3'>";
+                        echo "<div class='font-weight-bold'>"; echo $count; echo ".</div>";
+                        echo "<div class='row g-0'>";
+                        echo "<div class='col font-weight-bold'>";
+                        echo "<p> Name: "; 
+                        echo "</div>";
+                        echo "<div class='col'>";
+                        echo $row["name"]; echo "</p>";
+                        echo "</div>";
+                        echo "</div>";
+                        echo "<div class='row g-0'>";
+                        echo "<div class='col font-weight-bold'>";
+                        echo "<p> Unit Price: ";
+                        echo "</div>";
+                        echo "<div class='col'>";
+                        echo '₱ '.number_format($row["price"]); echo "</p>";
+                        echo "</div>";
+                        echo "</div>";
+                        echo "<div class='row g-0'>";
+                        echo "<div class='col font-weight-bold'>";
+                        echo "<p> Number of items: ";
+                        echo "</div>";
+                        echo "<div class='col'>";
+                        echo $row["quantity"]; echo "</p>";
+                        echo "</div>";
+                        echo "</div>";
+                        echo "<div class='row g-0'>";
+                        echo "<div class='col font-weight-bold'>";
+                        echo "<p> Total Amount: ";
+                        echo "</div>";
+                        echo "<div class='col'>";
+                        echo '₱ '.number_format($row["price"]*$row["quantity"]); echo "</p>";
+                        echo "</div>";
+                        echo "</div>";
+                        echo "</div>";
 
-<div class="container mt-5 mb-4">
-    <div class="row">
-        <h3>Women</h3>
-    <?php
-      
-      $select_products = mysqli_query($conn, "SELECT * FROM `products`");
-      if(mysqli_num_rows($select_products) > 0 ){
-         while($fetch_product = mysqli_fetch_assoc($select_products)){
-            if($fetch_product['category'] == 'Women') {
-      ?>
-        <div class="col col-6 col-lg-3 text-center mb-4">
-            <div class="border border-gray productBorder">
-            <form action="" method="post">
-                    <img src="uploaded_img/<?php echo $fetch_product['image']; ?>" alt="" height="150px">
-                    <h3 ><?php echo $fetch_product['name']; ?></h3>
-                    <div >₱<?php echo number_format($fetch_product['price']); ?>/-</div>
-                    <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
-                    <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
-                    <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
-                    <input type="submit" class="btn btn-warning mb-3" value="add to cart" name="add_to_cart">
-            </form>
-
+                        $count++;
+                       }
+                       
+                     }
+                ?>
             </div>
         </div>
-        <?php
-            };
-         };
-      };
-      ?>  
     </div>
 </div>
-
-<div class="container mt-5 mb-4">
-    <div class="row">
-        <h3>Unisex</h3>
-    <?php
-      
-      $select_products = mysqli_query($conn, "SELECT * FROM `products`");
-      if(mysqli_num_rows($select_products) > 0 ){
-         while($fetch_product = mysqli_fetch_assoc($select_products)){
-            if($fetch_product['category'] == 'Unisex') {
-      ?>
-        <div class="col col-6 col-lg-3 text-center">
-            <div class="border border-gray productBorder">
-            <form action="" method="post">
-                    <img src="uploaded_img/<?php echo $fetch_product['image']; ?>" alt="" height="150px">
-                    <h3 ><?php echo $fetch_product['name']; ?></h3>
-                    <div >₱<?php echo number_format($fetch_product['price']); ?>/-</div>
-                    <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
-                    <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
-                    <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
-                    <input type="submit" class="btn btn-warning mb-3" value="add to cart" name="add_to_cart">
-            </form>
-
-            </div>
-        </div>
-        <?php
-            };
-         };
-      };
-      ?>  
-    </div>
 </div>
-
-<div class="container mt-5 mb-5">
-    <div class="row">
-        <h3>Kids</h3>
-    <?php
-      
-      $select_products = mysqli_query($conn, "SELECT * FROM `products`");
-      if(mysqli_num_rows($select_products) > 0 ){
-         while($fetch_product = mysqli_fetch_assoc($select_products)){
-            if($fetch_product['category'] == 'Kids') {
-      ?>
-        <div class="col col-6 col-lg-3 text-center">
-            <div class="border border-gray productBorder">
-            <form action="" method="post">
-                    <img src="uploaded_img/<?php echo $fetch_product['image']; ?>" alt="" height="150px">
-                    <h3 ><?php echo $fetch_product['name']; ?></h3>
-                    <div >₱<?php echo number_format($fetch_product['price']); ?>/-</div>
-                    <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
-                    <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
-                    <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
-                    <input type="submit" class="btn btn-warning mb-3" value="add to cart" name="add_to_cart">
-            </form>
-
-            </div>
-        </div>
-        <?php
-            };
-         };
-      };
-      ?>  
-    </div>
 </div>
-
-
 
     
             

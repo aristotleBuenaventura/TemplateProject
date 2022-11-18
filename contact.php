@@ -3,6 +3,26 @@ session_start();
 
 @include 'config.php';
 
+if (isset($_SESSION['email'])){
+    $email = $_SESSION['email'];
+  } else {
+    $email = "";
+  };
+
+if(isset($_POST["submit"]))
+{
+    mysqli_query($conn,"insert into inquiries values(NULL,'$_POST[name]','$_POST[email]','$_POST[subject]','$_POST[message]')");
+    ?>
+    
+    <script type="text/javascript">
+        alert("Inquiry has been successfully submitted");
+        window.location.href=window.location.href;
+    </script>
+
+
+    <?php
+}
+  
 ?>
 
 <!DOCTYPE html>
@@ -15,6 +35,7 @@ session_start();
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="scss/style.css">
 </head>
 <body>
     <div class="container-fluid box">
@@ -26,9 +47,6 @@ session_start();
                     </li>
                     <li class="nav-item me-2">
                         <a href="products.php">Products</a>
-                    </li>
-                    <li class="nav-item me-2">
-                        <a href="inquiry.php">Inquiry</a>
                     </li>
                     <li class="nav-item me-2">
                         <a href="about.php">About</a>
@@ -68,7 +86,7 @@ session_start();
                     </div>
                 </div>
                 <?php
-                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart`") or die('query failed');
+                    $select_rows = mysqli_query($conn, "SELECT * FROM `cart` where email = '$email' and payment = 'Unpaid'") or die('query failed');
                     $row_count = mysqli_num_rows($select_rows);
                 ?>
                 <div class="position-relative col col-6 col-sm-6 col-md-4 mt-3 mb-3 float-right links d-flex justify-content-end">
@@ -95,6 +113,99 @@ session_start();
 
     
     
+    <div class="container mb-5">
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6 text-center">
+                <h2 class="heading-section mt-5">Contact Us</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="wrapper">
+                    <div class="row no-gutters">
+                        <div class="col-lg-8 col-md-7 order-md-last d-flex align-items-stretch">
+                            <div class="contact-wrap w-100 p-md-5 p-4">
+                                <h3 class="mb-4">Get in touch</h3>
+                                <div id="form-message-warning" class="mb-4"></div> 
+                                <form method="post">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label class="label" for="name">Full Name</label>
+                                                <input type="text" class="form-control" name="name" id="name" placeholder="Name">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6"> 
+                                            <div class="form-group">
+                                                <label class="label" for="email">Email Address</label>
+                                                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label" for="subject">Subject</label>
+                                                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label class="label" for="#">Message</label>
+                                                <textarea name="message" class="form-control" id="message" cols="30" rows="4" placeholder="Message"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <input type="submit" name="submit" value="Send Message" class="btn btn-primary">
+                                                <div class="submitting"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-5 d-flex align-items-stretch">
+                            <div class="info-wrap bg-primary w-100 p-md-5 p-4">
+                                <h3>Let's get in touch</h3>
+                                <p class="mb-4">We're open for any suggestion or just to have a chat</p>
+                        <div class="dbox w-100 d-flex align-items-start">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="fa fa-map-marker"></span>
+                            </div>
+                            <div class="text pl-3">
+                            <p><span>Address:</span> 198 West 21th Street, Suite 721 New York NY 10016</p>
+                            </div>
+                        </div>
+                        <div class="dbox w-100 d-flex align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="fa fa-phone"></span>
+                            </div>
+                            <div class="text pl-3">
+                            <p><span>Phone:</span> <a href="tel://1234567920">+ 1235 2355 98</a></p>
+                            </div>
+                        </div>
+                        <div class="dbox w-100 d-flex align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="fa fa-paper-plane"></span>
+                            </div>
+                            <div class="text pl-3">
+                            <p><span>Email:</span> <a href="mailto:info@yoursite.com">info@yoursite.com</a></p>
+                            </div>
+                        </div>
+                        <div class="dbox w-100 d-flex align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="fa fa-globe"></span>
+                            </div>
+                            <div class="text pl-3">
+                            <p><span>Website</span> <a href="#">yoursite.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     
             
