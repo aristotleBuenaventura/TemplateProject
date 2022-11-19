@@ -258,7 +258,7 @@ if(isset($message)){
       <input type="text" class="box" required name="update_p_name" value="<?php echo $fetch_edit['name']; ?>">
       <input type="number" min="0" class="box" required name="update_p_price" value="<?php echo $fetch_edit['price']; ?>">
       <input type="file" class="box" required name="update_p_image" accept="image/png, image/jpg, image/jpeg">
-      <input type="submit" value="update the prodcut" name="update_product" class="btn">
+      <input type="submit" value="update the product" name="update_product" class="btn">
       <input type="reset" value="cancel" id="close-edit" class="option-btn">
    </form>
 

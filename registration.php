@@ -208,7 +208,7 @@ if($resultCheck > 0) {
                   <div class="d-flex flex-row align-items-center ">
                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
                     <div class="form-outline flex-fill mb-0">
-                      <input type="text" id="Last Name" name="firstname" class="form-control mb-3" placeholder="Last Name" />
+                      <input type="text" id="Last Name" name="lastname" class="form-control mb-3" placeholder="Last Name" />
                     </div>
                   </div>
 
