@@ -41,8 +41,9 @@ if(isset($_POST['update_product'])){
    $update_p_image = $_FILES['update_p_image']['name'];
    $update_p_image_tmp_name = $_FILES['update_p_image']['tmp_name'];
    $update_p_image_folder = 'uploaded_img/'.$update_p_image;
+   $update_p_category = $_POST['category_update'];
 
-   $update_query = mysqli_query($conn, "UPDATE `products` SET name = '$update_p_name', price = '$update_p_price', image = '$update_p_image' WHERE id = '$update_p_id'");
+   $update_query = mysqli_query($conn, "UPDATE `products` SET name = '$update_p_name', price = '$update_p_price', image = '$update_p_image', category = '$update_p_category' WHERE id = '$update_p_id'");
 
    if($update_query){
       move_uploaded_file($update_p_image_tmp_name, $update_p_image_folder);
@@ -88,7 +89,7 @@ if (isset($_SESSION['email'])){
     <title>Template Project</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/index.css?v=<?php echo time(); ?>">
 </head>
 <body>
 
@@ -103,9 +104,9 @@ if(isset($message)){
 ?>
 
 <div class="container-fluid box">
-        <nav class="navbar navbar-expand-sm navbar-light bg-warning  navigation">
+        <nav class="navbar navbar-expand-sm navbar-light bg-warning  navigation float-end rounded mt-3 me-5">
             <div class="container links">
-                <ul class="navbar-nav me-auto">
+                <!-- <ul class="navbar-nav me-auto">
                     <li class="nav-item me-2">
                         <a href="index.php">Home</a>
                     </li>
@@ -124,18 +125,18 @@ if(isset($message)){
                   <li class="nav-item me-2">
                     <a href="contact.php">Contact</a>
                 </li>
-                </ul>
-                <ul class="navbar-nav justify-content-end">
+                </ul> -->
+                <ul class="navbar-nav">
                     <?php 
                         if($email != '' ){
                     ?>
-                        <li class="nav-item me-2">
+                        <li class="nav-item">
                                 <a href="logout.php">Logout</a>
                             </li>
                         <?php
                         } else {
                     ?>
-                        <li class="nav-item me-2">
+                        <li class="nav-item">
                             <a href="login.php">Login</a>
                         </li>
                     <?php
@@ -153,24 +154,6 @@ if(isset($message)){
                 <div class="col col-12 col-sm-12 col-md-4 mt-2 mb-2">
                     <a href="index.php"><img class="logo" src="images/logo-no-background.png" alt="" ></a>
                 </div>
-                <div class="col col-6 col-sm-6 col-md-4 align-self-center align-items-center mt-2 mb-3">
-                    <div class="input-group rounded ">
-                        <input type="search" class="form-control rounded searchBar" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                        <button class="border-0 rounded bg-gray searchBar px-3">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-                            </svg>
-                        </button>
-                        
-                    </div>
-                </div>
-                <div class="col col-6 col-sm-6 col-md-4 mt-3 mb-3 float-right links d-flex justify-content-end">
-                    <a href="#">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-cart4" viewBox="0 0 16 16">
-                        <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5zM3.14 5l.5 2H5V5H3.14zM6 5v2h2V5H6zm3 0v2h2V5H9zm3 0v2h1.36l.5-2H12zm1.11 3H12v2h.61l.5-2zM11 8H9v2h2V8zM8 8H6v2h2V8zM5 8H3.89l.5 2H5V8zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0zm9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0z"/>
-                      </svg>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -185,15 +168,15 @@ if(isset($message)){
                 <p>Name of the Watch: <input type="text" name="p_name" placeholder="Enter the Watch" class="box" required></p>
                 <p>Price: <input type="number" name="p_price" min="0" placeholder="Enter the Price" class="box" required>
                 <input type="file" name="p_image" accept="image/png, image/jpg, image/jpeg" class="box" required></p>
-                <label for="cars">Category:</label>
-                <select name="category" id="cars">
+                <label for="watch">Category:</label>
+                <select name="category" id="watch">
                     <option value="Men">Men</option>
                     <option value="Women">Women</option>
                     <option value="Unisex">Unisex</option>
                     <option value="Kids">Kids</option>
                 </select>
                 <div class="mt-2 mb-3">
-                    <input type="submit" value="add" name="add_product" class="btn btn-success">
+                    <input type="submit" value="Add" name="add_product" class="btn btn-success">
                 </div>
             </form>
         </div>
@@ -222,11 +205,11 @@ if(isset($message)){
          <tr>
             <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
             <td><?php echo $row['name']; ?></td>
-            <td>₱<?php echo $row['price']; ?>/-</td>
+            <td>₱<?php echo number_format($row['price']); ?></td>
             <td><?php echo $row['category']; ?></td>
             <td>
-               <a href="admin.php?delete=<?php echo $row['id']; ?>" class="delete-btn btn btn-danger" onclick="return confirm('are your sure you want to delete this?');"> <i class="fas fa-trash"></i> delete </a>
-               <a href="admin.php?edit=<?php echo $row['id']; ?>" class="option-btn btn btn-warning"> <i class="fas fa-edit"></i> update </a>
+               <a href="admin.php?delete=<?php echo $row['id']; ?>" class="delete-btn btn btn-danger" onclick="return confirm('are your sure you want to delete this?');"> <i class="fas fa-trash"></i>Delete</a>
+               <a href="admin.php?edit=<?php echo $row['id']; ?>" class="option-btn btn btn-warning"> <i class="fas fa-edit"></i>Update</a>
             </td>
          </tr>
 
@@ -244,6 +227,7 @@ if(isset($message)){
 <section class="edit-form-container">
 
    <?php
+
    
    if(isset($_GET['edit'])){
       $edit_id = $_GET['edit'];
@@ -251,22 +235,36 @@ if(isset($message)){
       if(mysqli_num_rows($edit_query) > 0){
          while($fetch_edit = mysqli_fetch_assoc($edit_query)){
    ?>
-
-   <form action="" method="post" enctype="multipart/form-data">
-      <img src="uploaded_img/<?php echo $fetch_edit['image']; ?>" height="200" alt="">
-      <input type="hidden" name="update_p_id" value="<?php echo $fetch_edit['id']; ?>">
-      <input type="text" class="box" required name="update_p_name" value="<?php echo $fetch_edit['name']; ?>">
-      <input type="number" min="0" class="box" required name="update_p_price" value="<?php echo $fetch_edit['price']; ?>">
-      <input type="file" class="box" required name="update_p_image" accept="image/png, image/jpg, image/jpeg">
-      <input type="submit" value="update the product" name="update_product" class="btn">
-      <input type="reset" value="cancel" id="close-edit" class="option-btn">
-   </form>
+    <div class="admin_update_modal" >
+        <form action="" method="post" enctype="multipart/form-data">
+           <img src="uploaded_img/<?php echo $fetch_edit['image']; ?>" height="200" alt="">
+           <input type="hidden" name="update_p_id" value="<?php echo $fetch_edit['id']; ?>">
+           <input type="text" class="box" required name="update_p_name" value="<?php echo $fetch_edit['name']; ?>">
+           <input type="number" min="0" class="box" required name="update_p_price" value="<?php echo $fetch_edit['price']; ?>">
+           <label class="d-flex justify-content-start" for="watch">Category:</label>
+                <select class="d-flex justify-content-start" name="category_update" id="watch">
+                    <option value="Men">Men</option>
+                    <option value="Women">Women</option>
+                    <option value="Unisex">Unisex</option>
+                    <option value="Kids">Kids</option>
+                </select>
+           <input type="file" class="box" name="update_p_image" required accept="image/png, image/jpg, image/jpeg">
+           <input type="submit" value="update the product" name="update_product" class="btn btn-warning">
+           <input type="reset" name="cancel" value="cancel" id="close-edit" class="option-btn btn btn-danger" onclick="document.querySelector('.edit-form-container').style.display = 'none';">
+        </form>
+    </div>
 
    <?php
             };
          };
          echo "<script>document.querySelector('.edit-form-container').style.display = 'flex';</script>";
       };
+
+      if(isset($_GET['cancel'])){
+        echo "<script>document.querySelector('.edit-form-container').style.display = 'none';</script>";
+      }
+
+      
    ?>
 
 </section>
@@ -274,6 +272,181 @@ if(isset($message)){
 
 </div>
 
+<div class="container">
+
+    <div class="atitle py-4">
+            <h2>List of Users</h2>
+        </div>
+    <div class="col-lg-12">
+        <div class="spacer"></div>
+        <table class="table">
+            <thead>
+                <tr>
+                <th>User Image</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Password</th>
+                <th>Role</th>
+                <th colspan=2>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    $res=mysqli_query($conn,"select * from registration");
+                    while($row=mysqli_fetch_array($res))
+                    {
+                    echo "<tr>";
+                    echo "<td>"; ?> <p>None</p> <?php echo "</td>";
+                    echo "<td>"; echo $row["username"]; echo "</td>";
+                    echo "<td>"; echo $row["email"]; echo "</td>";
+                    echo "<td>"; echo $row["password"]; echo "</td>";
+                    echo "<td>"; echo $row["role"]; echo  "</td>";
+                    echo "<td>"; ?> <a href="edit.php?id=<?php echo $row["id"]; ?>"<button type="button"
+                    class="btn btn-warning greenbtn ">Edit</button></a> <?php echo "</td>";
+                    echo "<td>"; ?><button type="button" class="btn btn-danger redbtn " onclick="if (confirm('Are you sure you want to delete this user?')) {
+                    location.href = 'deleteRegistration.php?id=<?php echo $row['id']; ?> ';}">Delete</button><?php echo "</td>";
+                    echo "</tr>";
+                    }
+                ?>
+            </tbody>
+        </table>
+        <div class="spacer"></div>
+    </div>
+</div>
+
+<!--CONTACT--><!--CONTACT--><!--CONTACT--><!--CONTACT--><!--CONTACT--><!--CONTACT--><!--CONTACT--><!--CONTACT--><!--CONTACT--><!--CONTACT-->
+
+<div class="container">
+
+    <div class="atitle py-4">
+        <h2>Message Inquiries</h2>
+    </div>
+    <div class="col-lg-12">
+        <div class="spacer"></div>
+        <table class="table">
+            <thead>
+                <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Subject</th>
+                <th>Message</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    $res=mysqli_query($conn,"select * from inquiries");
+                    while($row=mysqli_fetch_array($res))
+                    {
+                    echo "<tr>";
+                    echo "<td>"; echo $row["name"]; echo "</td>";
+                    echo "<td>"; echo $row["email"]; echo "</td>";
+                    echo "<td>"; echo $row["subject"]; echo "</td>";
+                    echo "<td>"; echo $row["message"]; echo "</td>";
+                    echo "<td>"; ?><button type="button" class="btn btn-danger redbtn " onclick="if (confirm('Are you sure you want to delete this message?')) {
+                        location.href = 'deleteInquiries.php?id=<?php echo $row['id']; ?> ';}">Delete</button><?php echo "</td>";
+                    echo "</tr>";
+                    }
+                ?>
+            </tbody>
+        </table>
+        <div class="spacer"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="atitle py-4">
+        <h2>Pending Carts</h2>
+    </div>
+    <div class="col-lg-12">
+        <div class="spacer"></div>
+        <table class="table">
+            <thead>
+                <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Email</th>
+                <th>Payment Status</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    $res=mysqli_query($conn,"select * from cart");
+                    while($row=mysqli_fetch_array($res))
+                    {
+                        if($row['payment'] == 'Unpaid'){
+                        echo "<tr>";
+                        echo "<td>"; echo $row["name"]; echo "</td>";
+                        ?>
+                        <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
+                        <?php
+                        echo "<td> ₱"; echo number_format($row["price"]); echo "</td>";
+                        echo "<td>"; echo $row["quantity"]; echo "</td>";
+                        echo "<td> ₱"; echo number_format($row["price"] * $row["quantity"]); echo "</td>";
+                        echo "<td>"; echo $row["email"]; echo "</td>";
+                        echo "<td>"; echo $row["payment"]; echo "</td>";
+                        echo "<td>"; ?><button type="button" class="btn btn-danger redbtn " onclick="if (confirm('Are you sure you want to delete this Unpaid Item?')) {
+                        location.href = 'deletePending.php?id=<?php echo $row['id']; ?> ';}">Delete</button><?php echo "</td>";
+                        echo "</tr>";
+                        }
+                    }
+                ?>
+            </tbody>
+        </table>
+        <div class="spacer"></div>
+    </div>
+</div>
+
+<div class="container mb-5">
+    <div class="atitle py-4">
+        <h2>Successful Transactions</h2>
+    </div>
+    <div class="col-lg-12">
+        <div class="spacer"></div>
+        <table class="table">
+            <thead>
+                <tr>
+                <th>Name</th>
+                <th>Image</th>
+                <th>Unit Price</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Email</th>
+                <th>Payment Status</th>
+                <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                    $res=mysqli_query($conn,"select * from cart");
+                    while($row=mysqli_fetch_array($res))
+                    {
+                        if($row['payment'] == 'Paid'){
+                        echo "<tr>";
+                        echo "<td>"; echo $row["name"]; echo "</td>";
+                        ?>
+                        <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
+                        <?php
+                        echo "<td> ₱"; echo number_format($row["price"]); echo "</td>";
+                        echo "<td>"; echo $row["quantity"]; echo "</td>";
+                        echo "<td> ₱"; echo number_format($row["price"] * $row["quantity"]); echo "</td>";
+                        echo "<td>"; echo $row["email"]; echo "</td>";
+                        echo "<td>"; echo $row["payment"]; echo "</td>";
+                        echo "<td>"; ?><button type="button" class="btn btn-danger redbtn " onclick="if (confirm('Are you sure you want to delete this Paid Item?')) {
+                            location.href = 'deleteSuccessful.php?id=<?php echo $row['id']; ?> ';}">Delete</button><?php echo "</td>";
+                        echo "</tr>";
+                        }
+                    }
+                ?>
+            </tbody>
+        </table>
+        <div class="spacer"></div>
+    </div>
+</div>
 
 
 
@@ -281,10 +454,10 @@ if(isset($message)){
 <div class="global border-top border-gray">
     <div class="container">
       <div class="row ">
-        <div class="col col-12 col-md-4  mt-5">
+      <div class="col col-12 col-lg-4  mt-5">
             <img src="images/logo-black.png" alt="" class="logoFooter">
         </div>
-        <div class="col col-12 col-md-4  mt-5">
+        <div class="col col-12 col-lg-4  mt-5">
           <h6>Pages</h6>
           <ul class="nav flex-column">
             <li><a href="#">Home</a></li>
@@ -295,7 +468,7 @@ if(isset($message)){
             <li><a href="#">Contact</a></li>
           </ul>
         </div>
-        <div class="col col-12 col-md-4  mt-5 mb-5">
+        <div class="col col-12 col-lg-4  mt-5 mb-5">
           <h6>Resources</h6>
           <ul class="nav flex-column">
             <li><a href="#">Terms and Conditions</a></li>

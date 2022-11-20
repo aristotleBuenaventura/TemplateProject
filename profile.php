@@ -35,7 +35,7 @@ if($resultCheck > 0) {
     <title>Template Project</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/index.css">
+     <link rel="stylesheet" href="css/index.css?v=<?php echo time(); ?>">
 </head>
 <body>
 <style>
@@ -109,9 +109,22 @@ body {
                     <?php 
                         if($email != '' ){
                     ?>
-                        <li class="nav-item me-2">
-                                <a href="logout.php">Logout</a>
-                            </li>
+                        <div class="dropdown">
+                          <button onclick="myFunction()" class="dropbtn btn btn-warning"><?php echo $emailDB  ?></button>
+                          <div id="myDropdown" class="dropdown-content">
+                          <?php 
+                            if($roleDB == 'admin' ){
+                          ?>
+                            <a href="admin.php">Admin</a>  
+                          <?php
+                              
+                            }
+                          ?>
+                            <a href="profile.php">Profile</a>  
+                            <a href="cart.php">Cart</a>
+                            <a href="logout.php">Logout</a>
+                          </div>
+                        </div>
                         <?php
                         } else {
                     ?>
@@ -259,10 +272,10 @@ body {
 <div class="global border-top border-gray">
     <div class="container">
       <div class="row ">
-        <div class="col col-12 col-md-4  mt-5">
+      <div class="col col-12 col-lg-4  mt-5">
             <img src="images/logo-black.png" alt="" class="logoFooter">
         </div>
-        <div class="col col-12 col-md-4  mt-5">
+        <div class="col col-12 col-lg-4  mt-5">
           <h6>Pages</h6>
           <ul class="nav flex-column">
             <li><a href="#">Home</a></li>
@@ -273,7 +286,7 @@ body {
             <li><a href="#">Contact</a></li>
           </ul>
         </div>
-        <div class="col col-12 col-md-4  mt-5 mb-5">
+        <div class="col col-12 col-lg-4  mt-5 mb-5">
           <h6>Resources</h6>
           <ul class="nav flex-column">
             <li><a href="#">Terms and Conditions</a></li>
@@ -313,7 +326,24 @@ body {
   </div>
   </div>
 
+  <script>
+    function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+    }
 
+    window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        var i;
+        for (i = 0; i < dropdowns.length; i++) {
+          var openDropdown = dropdowns[i];
+          if (openDropdown.classList.contains('show')) {
+            openDropdown.classList.remove('show');
+          }
+        }
+      }
+    }
+  </script>
     <script src="https://code.jquery.com/jquery-3.6.0.js"
     integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
     crossorigin="anonymous"></script>
