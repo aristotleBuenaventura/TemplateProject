@@ -34,18 +34,9 @@ if(isset($_POST['add_to_cart'])){
     </script>
     <?php
    }
+   
 
 }
-
-if(isset($_POST['product'])){
-    $product_id = $_POST['product_id'];
-    ?>
-    <script type="text/javascript">
-        window.location.href="description.php?id=<?php echo $product_id; ?>";
-    </script>
-    <?php
-}
-
 
 if (isset($_SESSION['email'])){
     $email = $_SESSION['email'];
@@ -197,17 +188,15 @@ if(isset($message)){
             if($fetch_product['category'] == 'Men') {
       ?>
         <div class="col col-6 col-lg-3 text-center mb-4">
-            <div class="btn border border-gray productBorder">
+            <div class="border border-gray productBorder">
             <form action="" method="post">
-                <button class="button_product" name="product">
                     <img src="uploaded_img/<?php echo $fetch_product['image']; ?>" alt="" height="150px">
                     <h3 ><?php echo $fetch_product['name']; ?></h3>
                     <div >₱<?php echo number_format($fetch_product['price']); ?></div>
-                    <input type="hidden" name="product_id" value="<?php echo $fetch_product['id']; ?>">
                     <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
                     <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
                     <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
-                </button>
+                    <input type="submit" class="btn btn-warning mb-3" value="add to cart" name="add_to_cart">
             </form>
 
             </div>
@@ -233,15 +222,13 @@ if(isset($message)){
         <div class="col col-6 col-lg-3 text-center mb-4">
             <div class="border border-gray productBorder">
             <form action="" method="post">
-                <button class="button_product" name="product">
                     <img src="uploaded_img/<?php echo $fetch_product['image']; ?>" alt="" height="150px">
                     <h3 ><?php echo $fetch_product['name']; ?></h3>
                     <div >₱<?php echo number_format($fetch_product['price']); ?></div>
-                    <input type="hidden" name="product_id" value="<?php echo $fetch_product['id']; ?>">
                     <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
                     <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
                     <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
-                </button>
+                    <input type="submit" class="btn btn-warning mb-3" value="add to cart" name="add_to_cart">
             </form>
 
             </div>
@@ -267,15 +254,13 @@ if(isset($message)){
         <div class="col col-6 col-lg-3 text-center mb-4">
             <div class="border border-gray productBorder">
             <form action="" method="post">
-                <button class="button_product" name="product">
                     <img src="uploaded_img/<?php echo $fetch_product['image']; ?>" alt="" height="150px">
                     <h3 ><?php echo $fetch_product['name']; ?></h3>
                     <div >₱<?php echo number_format($fetch_product['price']); ?></div>
-                    <input type="hidden" name="product_id" value="<?php echo $fetch_product['id']; ?>">
                     <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
                     <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
                     <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
-                </button>
+                    <input type="submit" class="btn btn-warning mb-3" value="add to cart" name="add_to_cart">
             </form>
 
             </div>
@@ -301,15 +286,13 @@ if(isset($message)){
         <div class="col col-6 col-lg-3 text-center mb-4">
             <div class="border border-gray productBorder">
             <form action="" method="post">
-                <button class="button_product" name="product">
                     <img src="uploaded_img/<?php echo $fetch_product['image']; ?>" alt="" height="150px">
                     <h3 ><?php echo $fetch_product['name']; ?></h3>
                     <div >₱<?php echo number_format($fetch_product['price']); ?></div>
-                    <input type="hidden" name="product_id" value="<?php echo $fetch_product['id']; ?>">
                     <input type="hidden" name="product_name" value="<?php echo $fetch_product['name']; ?>">
                     <input type="hidden" name="product_price" value="<?php echo $fetch_product['price']; ?>">
                     <input type="hidden" name="product_image" value="<?php echo $fetch_product['image']; ?>">
-                </button>
+                    <input type="submit" class="btn btn-warning mb-3" value="add to cart" name="add_to_cart">
             </form>
 
             </div>

@@ -181,5 +181,17 @@
 
 .show {display: block;}
 
+.button_product {
+  background: none;
+  border: none;
+}
 
+.description_image {
+  height: 400px;
+  width: 300px;
+}
 
+.related_product {
+  height: 200px;
+  width: 150px;
+}

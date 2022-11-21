@@ -11,8 +11,9 @@ if(isset($_POST['add_product'])){
    $p_image_tmp_name = $_FILES['p_image']['tmp_name'];
    $p_image_folder = 'uploaded_img/'.$p_image;
    $p_category = $_POST['category'];
+   $p_description = $_POST['description'];
 
-   $insert_query = mysqli_query($conn, "INSERT INTO `products`(name, price, image, category) VALUES('$p_name', '$p_price', '$p_image','$p_category')") or die('query failed');
+   $insert_query = mysqli_query($conn, "INSERT INTO `products`(name, price, image, category,description) VALUES('$p_name', '$p_price', '$p_image','$p_category','$p_description')") or die('query failed');
 
    if($insert_query){
       move_uploaded_file($p_image_tmp_name, $p_image_folder);
@@ -175,6 +176,10 @@ if(isset($message)){
                     <option value="Unisex">Unisex</option>
                     <option value="Kids">Kids</option>
                 </select>
+                <div class="form-group mx-4">
+                    <label class="label d-flex justify-content-start" for="#">Product Description:</label>
+                    <textarea name="description" class="form-control" id="message" cols="30" rows="4" placeholder="Enter the Product Description"></textarea>
+                </div>
                 <div class="mt-2 mb-3">
                     <input type="submit" value="Add" name="add_product" class="btn btn-success">
                 </div>
@@ -197,7 +202,7 @@ if(isset($message)){
       <tbody>
          <?php
          
-            $select_products = mysqli_query($conn, "SELECT * FROM `products`");
+            $select_products = mysqli_query($conn, "SELECT * FROM `products` ORDER BY category");
             if(mysqli_num_rows($select_products) > 0){
                while($row = mysqli_fetch_assoc($select_products)){
          ?>
@@ -231,7 +236,7 @@ if(isset($message)){
    
    if(isset($_GET['edit'])){
       $edit_id = $_GET['edit'];
-      $edit_query = mysqli_query($conn, "SELECT * FROM `products` WHERE id = $edit_id");
+      $edit_query = mysqli_query($conn, "SELECT * FROM `products` WHERE id = $edit_id ");
       if(mysqli_num_rows($edit_query) > 0){
          while($fetch_edit = mysqli_fetch_assoc($edit_query)){
    ?>
