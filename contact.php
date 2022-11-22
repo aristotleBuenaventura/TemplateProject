@@ -23,7 +23,7 @@ if(isset($_POST["submit"]))
     <?php
 }
 
-$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+  $result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
   $resultCheck = mysqli_num_rows($result);
 
   $roleDB = "";

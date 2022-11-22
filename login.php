@@ -5,6 +5,18 @@ session_start();
 
 error_reporting(0);
 
+
+$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+$resultCheck = mysqli_num_rows($result);
+
+$roleDB = "";
+if($resultCheck > 0) {
+  while($row = mysqli_fetch_assoc($result)) {
+    $emailDB = $row['email'];
+    $roleDB = $row['role'];
+  }
+}
+
     
 if (isset($_SESSION['username'])) {
     header("Location: index.html");
@@ -13,20 +25,22 @@ if (isset($_SESSION['username'])) {
 if (isset($_POST['submit'])) {
     session_start();
     
-    $_SESSION['email'] = $_POST['email'];
     $email = $_POST['email'];
     $password = md5($_POST['password']);
-    $result = getUserByEmail($conn, $email, $password);
     $user = mysqli_fetch_row($result);
     $user = $_POST['username'];
+    $result = getUserByEmail($conn, $email, $password);
+    
     if ($result->num_rows > 0) {
                 $row = mysqli_fetch_row($result);
                 $_SESSION['username'] = $row['username'];
+                $_SESSION['email'] = $_POST['email'];
                 header("Location: admin.php");
             } else {
                 echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
+                session_destroy();
             }
-    $_SESSION["email"] = $email;        
+       
 
 }
 
@@ -39,18 +53,7 @@ if (isset($_SESSION['email'])){
   $email = $_SESSION['email'];
 } else {
   $email = "";
-}
-
-$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
-$resultCheck = mysqli_num_rows($result);
-
-$roleDB = "";
-if($resultCheck > 0) {
-  while($row = mysqli_fetch_assoc($result)) {
-    $emailDB = $row['email'];
-    $roleDB = $row['role'];
-  }
-}
+}   
 
 ?>
 
