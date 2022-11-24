@@ -25,20 +25,20 @@ if (isset($_SESSION['username'])) {
 if (isset($_POST['submit'])) {
     session_start();
     
+    ////////////////////////
     $email = $_POST['email'];
     $password = md5($_POST['password']);
     $user = mysqli_fetch_row($result);
     $user = $_POST['username'];
     $result = getUserByEmail($conn, $email, $password);
-    
     if ($result->num_rows > 0) {
                 $row = mysqli_fetch_row($result);
                 $_SESSION['username'] = $row['username'];
-                $_SESSION['email'] = $_POST['email'];
+                $_SESSION['email'] = $_POST['email'];////////////////////////
                 header("Location: admin.php");
             } else {
                 echo "<script>alert('Woops! Email or Password is Wrong.')</script>";
-                session_destroy();
+                // session_destroy();////////////////////////
             }
        
 

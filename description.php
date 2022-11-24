@@ -46,6 +46,17 @@ if(isset($_POST['product'])){
   <?php
 }
 
+if(isset($_POST['order_now'])){
+  $product_id = $_POST['product_id'];
+  $product_quantity= $_POST['quantity'];
+  $product_price = $_POST['product_price']
+  ?>
+  <script type="text/javascript">
+      window.location.href="checkoutSingle.php?id=<?php echo $product_id; ?>&price=<?php echo $product_price; ?>&quantity=<?php echo $product_quantity; ?>";
+  </script>
+  <?php
+}
+
 if(isset($_POST['add_to_cart'])){
 
   $product_name = $_POST['product_name'];
@@ -191,20 +202,22 @@ if(isset($_POST['add_to_cart'])){
                 <div class="row gx-4 gx-lg-5 align-items-center">
                     <div class="col-md-6"><img class="card-img-top mb-5 mb-md-0 description_image" src="uploaded_img/<?php echo $product_image; ?>"  alt="..." /></div>
                     <div class="col-md-6">
-                        <div class="mb-1"><?php echo $product_category; ?></div>
+                        <h4 class="mb-1 font-bold"><?php echo $product_category; ?></h4>
                         <h1 class="display-5 fw-bolder"><?php echo $product_name; ?></h1>
-                        <div class="fs-5 mb-5">
+                        <div class="fs-5 mb-3">
                             <span>₱<?php echo number_format($product_price); ?></span>
                         </div>
                         <p class="lead"><?php echo $product_description; ?></p>
                         <div class="d-flex">
                           <form action="" method='post'>
+                            <input type="hidden" name="product_id" value="<?php echo $product_id; ?>">
                             <input type="hidden" name="product_name" value="<?php echo $product_name; ?>">
                             <input type="hidden" name="product_price" value="<?php echo $product_price; ?>">
                             <input type="hidden" name="product_image" value="<?php echo $product_image; ?>">
                             <div class="d-flex">
                               <input class="form-control text-center me-3" id="inputQuantity" type="num" value="1" style="max-width: 3rem" name="quantity"/>
-                              <input class="btn btn-outline-dark flex-shrink-0 btn btn-success text-white" type="submit" name="add_to_cart" value="Add to cart">
+                              <input class="btn btn-outline-dark flex-shrink-0 btn btn-info text-white" type="submit" name="add_to_cart" value="Add to cart">
+                              <input class="btn btn-outline-dark flex-shrink-0 btn btn-success text-white ms-4" type="submit" name="order_now" value="Buy now">
                             </div>
                           </form>
                         </div>
@@ -218,7 +231,7 @@ if(isset($_POST['add_to_cart'])){
                 <h2 class="fw-bolder mb-4">Related products</h2>
                 <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                   <?php
-                    $resultRelated = mysqli_query($conn,"SELECT * FROM products WHERE category='$product_category' LIMIT 4");
+                    $resultRelated = mysqli_query($conn,"SELECT * FROM products WHERE category='$product_category' and name NOT LIKE '$product_name' LIMIT 4");
                     $resultCheckRelated = mysqli_num_rows($resultProduct);
                     if($resultCheckRelated > 0) {
                     while($row = mysqli_fetch_assoc($resultRelated)) {
@@ -227,7 +240,7 @@ if(isset($_POST['add_to_cart'])){
                           <div class="card h-100 text-center">
                             <form action="" method="post">
                               <button class="button_product" name="product">
-                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" style="hover:">
                                   <h3 ><?php echo $row['name']; ?></h3>
                                   <div >₱<?php echo number_format($row['price']); ?></div>
                                   <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">

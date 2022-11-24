@@ -213,7 +213,7 @@ if (isset($_SESSION['email'])){
    </table>
 
    
-    <a href="checkout.php" class="text-white mb-5 btn-success btn <?= ($grand_total > 1)?'':'disabled'; ?>">Procced to Checkout</a>
+    <a href="checkout.php?" class="text-white mb-5 btn-success btn <?= ($grand_total > 1)?'':'disabled'; ?>">Proceed to Checkout</a>
    
 
 </section>
