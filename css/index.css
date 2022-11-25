@@ -1,5 +1,5 @@
 .logo {
-    height: 50px;
+    height: 80px;
 }
 
 .box{
@@ -8,11 +8,22 @@
 
 .navigation{
     font-size: 14px;
+    background-color: #dc3545;
     
 }
 
+.links-cart a {
+  color: black;
+  text-decoration:none; 
+}
+
+.links-cart a:hover {
+  color: blue;
+   
+}
+
 .links a {
-    color: black;
+    color: white;
     text-decoration:none; 
 }
 
@@ -95,14 +106,18 @@
   
 
 .logoFooter{
-    height: 80px;
+    height: 150px;
+}
+.rounded-mid {
+  border-radius: 1rem !important;
 }
 
 .carousel .carousel-item {
-    height: 400px;
+    height: 600px;
   }
   
   .carousel-item img {
+      radius: 1%;
       position: absolute;
       object-fit: cover;
       top: 0;
@@ -152,10 +167,12 @@
 }
 
 .dropbtn {
-  color: black;
   font-size: 16px;
   border: none;
 }
+
+
+
 
 .dropdown {
   position: relative;
@@ -240,4 +257,126 @@
 .button-27:active {
   box-shadow: none;
   transform: translateY(0);
+}
+
+/* homepage */
+
+
+.showcase
+{
+  position: relative;
+  right: 0;
+  width: 100%;
+ /* min-height: 100vh; */
+  padding: 100px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #111;
+  transition: 0.5s;
+  z-index: 2;
+  
+}
+.showcase.active
+{
+  right: 300px;
+}
+
+.showcase video
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.8;
+}
+.overlay
+{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+/*  background: ; */
+  mix-blend-mode: overlay;
+}
+.text
+{
+  z-index: 10;
+}
+
+.text h2
+{
+  font-size: 4em;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1em;
+  text-transform: uppercase;
+  font-family: 'Racing Sans One', cursive;
+ 
+}
+
+.aboutTitle{
+  font-family: 'Racing Sans One', cursive;
+}
+
+
+.text h6
+{
+  font-size: 2em;
+  font-weight: 400;
+  color: #fff;
+  line-height: 1.3em;
+  text-transform: uppercase;
+  font-family: 'Graduate', cursive;
+}
+
+.arrivals:hover{
+  transform: translateY(-5px);
+}
+
+.title{
+  text-align: center;
+  margin: 0 auto 40px;
+  position: relative;
+  line-height: 60px;
+  color: #555;
+}
+
+.title::after{
+  content: '';
+  background: black;
+  width: 100px;
+  height: 5px;
+  border-radius: 5px;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.parallax {
+  background-image: url("https://wallpaper.dog/large/10762968.png");
+  min-height: 600px;
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0px;
+  text-align: center;
+}
+
+
+.containerlast1 {            
+  width: 100%;
+  height: 660px;
+  
+  text-align: center;
+  padding: 60px 0px 0px 0px;
+}
+
+.hoverBox:hover{
+  transform: translateY(-5px);
 }
