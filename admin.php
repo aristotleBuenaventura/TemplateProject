@@ -104,29 +104,6 @@ if(isset($message)){
 };
 
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admins</title>
-    <link rel="icon" type="image/x-icon" href="images/favicon.png">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/index.css?v=<?php echo time(); ?>">
-</head>
-<body>
-
-<?php
-
-if(isset($message)){
-   foreach($message as $message){
-      echo '<div class="message"><span>'.$message.'</span> <i class="fas fa-times" onclick="this.parentElement.style.display = `none`;"></i> </div>';
-   };
-};
-
-?>
 
 <div class="container-fluid box">
         <nav class="navbar navbar-expand-sm navbar-light bg-danger  navigation float-end rounded mt-4 me-5">
@@ -196,7 +173,7 @@ if(isset($message)){
         <div class="border border-gray">
             <form action="" method="post" class="add-product-form " enctype="multipart/form-data">
                 <h3 class="mt-3">New Product</h3>
-                <p>Name of the Watch: <input type="text" name="p_name" placeholder="Enter the Watch" class="box" required></p>
+                <p>Name of the Product: <input type="text" name="p_name" placeholder="Enter the Product" class="box" required></p>
                 <p>Price: <input type="number" name="p_price" min="0" placeholder="Enter the Price" class="box" required>
                 <input type="file" name="p_image" accept="image/png, image/jpg, image/jpeg" class="box" required></p>
                 <label for="watch">Category:</label>
@@ -345,7 +322,9 @@ if(isset($message)){
                     while($row=mysqli_fetch_array($res))
                     {
                     echo "<tr>";
-                    echo "<td>"; echo $row["image"];echo "</td>";
+                    ?>
+                    <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
+                    <?php
                     echo "<td>"; echo $row["username"]; echo "</td>";
                     echo "<td>"; echo $row["email"]; echo "</td>";
                     echo "<td>"; echo $row["password"]; echo "</td>";

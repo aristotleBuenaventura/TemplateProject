@@ -12,7 +12,6 @@ if (isset($_SESSION['username'])) {
 }
 
 if (isset($_POST['submit'])) {
-    session_start();
     
     $username = $_POST['username'];
     $email = $_POST['email'];
@@ -22,18 +21,18 @@ if (isset($_POST['submit'])) {
     $cpassword = md5($_POST['cpassword']); 
     $role = "user";
 
-    $_SESSION["firstname"] = $firstname;
-    $_SESSION["lastname"] = $lastname;
-    $_SESSION["email"] = $email;
-
-
+    
+    
     if ($password === $cpassword) {
-        $users = getUserByEmail($conn, $email);
-        if ($users->num_rows === 0) {
-            $sql = "INSERT INTO registration (username, email, firstname, lastname, password, role)
+      $users = getUserByEmail($conn, $email);
+      if ($users->num_rows === 0) {
+        $sql = "INSERT INTO registration (username, email, firstname, lastname, password, role)
                     VALUES ('$username', '$email', '$firstname', '$lastname','$password', '$role')";
             $result = mysqli_query($conn, $sql);
             if ($result) {
+              $_SESSION["firstname"] = $firstname;
+              $_SESSION["lastname"] = $lastname;
+              $_SESSION["email"] = $email;
                 header('Location: login.php');
             } else {
                 echo "<script>alert('Woops! Something Went Wrong.')</script>";

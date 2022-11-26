@@ -115,10 +115,10 @@ if(isset($_POST['product'])){
             </div>
             <div class="carousel-inner rounded-mid">
               <div class="carousel-item active">
-                <img src="images/one.jpg" class="d-block w-100" alt="...">
+                <img src="images/banner4.png" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="images/2.jpg" class="d-block w-100" alt="...">
+                <img src="images/banner5.jpg" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
                 <img src="images/3.jpg" class="d-block w-100" alt="...">

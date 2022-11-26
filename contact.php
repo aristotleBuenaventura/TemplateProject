@@ -104,7 +104,7 @@ if(isset($_POST["submit"]))
                                 </form>
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-5 d-flex align-items-stretch">
+                        <div class="col-lg-4 col-md-5 d-flex align-items-stretch bg-light">
                             <div class="info-wrap bg-primary w-100 p-md-5 p-4">
                                 <h3>Let's get in touch</h3>
                                 <p class="mb-4">We're open for any suggestion or just to have a chat</p>

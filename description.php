@@ -49,12 +49,22 @@ if(isset($_POST['product'])){
 if(isset($_POST['order_now'])){
   $product_id = $_POST['product_id'];
   $product_quantity= $_POST['quantity'];
-  $product_price = $_POST['product_price']
+  $product_price = $_POST['product_price'];
+  if (isset($_SESSION['email'])){ 
   ?>
   <script type="text/javascript">
       window.location.href="checkoutSingle.php?id=<?php echo $product_id; ?>&price=<?php echo $product_price; ?>&quantity=<?php echo $product_quantity; ?>";
   </script>
   <?php
+  } else {
+    ?>
+      <script type="text/javascript">
+        alert("Please Log in first!");
+        window.location.href = "login.php";
+      </script>
+    <?php
+  }
+
 }
 
 if(isset($_POST['add_to_cart'])){
