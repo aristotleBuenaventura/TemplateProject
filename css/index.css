@@ -380,3 +380,7 @@
 .hoverBox:hover{
   transform: translateY(-5px);
 }
+
+.dropbtn{
+  cursor: pointer;
+}

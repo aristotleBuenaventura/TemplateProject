@@ -17,6 +17,7 @@ if($resultCheck > 0) {
   while($row = mysqli_fetch_assoc($result)) {
     $emailDB = $row['email'];
     $roleDB = $row['role'];
+    $imageDB = $row['image'];
   }
 }
 

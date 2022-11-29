@@ -1,4 +1,18 @@
+<?php
+$result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+$resultCheck = mysqli_num_rows($result);
 
+$roleDB = "";
+if($resultCheck > 0) {
+  while($row = mysqli_fetch_assoc($result)) {
+    $emailDB = $row['email'];
+    $roleDB = $row['role'];
+    $imageDB = $row['image'];
+  }
+}
+
+
+?>
 <div class="container-fluid box">
         <nav class="navbar navbar-expand-sm navbar-light navigation ">
             <div class="container links">
@@ -24,7 +38,7 @@
                         if($email != '' ){
                     ?>
                         <div class="dropdown">
-                          <button onclick="myFunction()" class="dropbtn btn btn-danger text-white"><?php echo $emailDB  ?></button>
+                          <img class="dropbtn rounded-circle" src="uploaded_img/<?php echo $imageDB; ?>" height="35px" onclick="myFunction()">
                           <div id="myDropdown" class="dropdown-content">
                           <?php 
                             if($roleDB == 'admin' ){
