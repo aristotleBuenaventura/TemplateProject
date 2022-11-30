@@ -43,8 +43,10 @@ if(isset($_POST['update_product'])){
    $update_p_image_tmp_name = $_FILES['update_p_image']['tmp_name'];
    $update_p_image_folder = 'uploaded_img/'.$update_p_image;
    $update_p_category = $_POST['category_update'];
+   $update_p_description = $_POST['update_p_description'];
 
-   $update_query = mysqli_query($conn, "UPDATE 'products' SET name = '$update_p_name', price = '$update_p_price', image = '$update_p_image', category = '$update_p_category' WHERE id = '$update_p_id'");
+
+   $update_query = mysqli_query($conn, "UPDATE `products` SET name = '$update_p_name', price = '$update_p_price', image = '$update_p_image', category = '$update_p_category', description = '$update_p_description' WHERE id = '$update_p_id'");
 
    if($update_query){
       move_uploaded_file($update_p_image_tmp_name, $update_p_image_folder);
@@ -182,6 +184,7 @@ if(isset($message)){
                     <option value="Women">Women</option>
                     <option value="Unisex">Unisex</option>
                     <option value="Kids">Kids</option>
+                    <option value="Upcoming Release">Upcoming Release</option>
                 </select>
                 <div class="form-group mx-4">
                     <label class="label d-flex justify-content-start" for="#">Product Description:</label>
@@ -259,8 +262,13 @@ if(isset($message)){
                     <option value="Women">Women</option>
                     <option value="Unisex">Unisex</option>
                     <option value="Kids">Kids</option>
+                    <option value="Upcoming Release">Upcoming Release</option>
                 </select>
            <input type="file" class="box" name="update_p_image" required accept="image/png, image/jpg, image/jpeg">
+           <div class="form-group mx-4">
+                    <label class="label d-flex justify-content-start" for="#">Product Description:</label>
+                    <textarea name="update_p_description" class="form-control mb-3" id="message" cols="30" rows="4" placeholder="Enter the Product Description"><?php echo $fetch_edit['description']; ?></textarea>
+           </div>
            <input type="submit" value="update the product" name="update_product" class="btn btn-warning">
            <input type="reset" name="cancel" value="cancel" id="close-edit" class="option-btn btn btn-danger" onclick="document.querySelector('.edit-form-container').style.display = 'none';">
         </form>

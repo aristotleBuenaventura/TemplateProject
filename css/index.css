@@ -115,15 +115,31 @@
 .carousel .carousel-item {
     height: 600px;
   }
+
+
   
   .carousel-item img {
-      radius: 1%;
       position: absolute;
-      object-fit: cover;
+      object-fit: fill;
       top: 0;
       left: 0;
-      min-height: 500px;
+      min-height: 600px;
   }
+
+.carousel_product .carousel_item_product {
+  height: 400px;
+
+}
+
+.carousel_item_product img {
+  position: absolute;
+  object-fit:cover;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
 
 .productBorder {
   border-radius: 10%;
@@ -383,4 +399,46 @@
 
 .dropbtn{
   cursor: pointer;
+}
+
+.page-row {
+  padding: 3rem;
+}
+
+.page-title {
+  margin: 0.3rem 0 2rem;
+  
+}
+
+.box-container {
+  padding: 2rem 1.5rem 0.2rem;
+  background-color: rgb(245, 245, 245);
+  margin: 0.3rem;
+  border-radius: 15px;
+  transition: all ease 0.2s;
+}
+
+.box-container:hover {
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+.profile {
+  border-radius: 50%;
+  width: 100%;
+  max-width: 150px;
+}
+
+.name {
+  font-size: 1.3rem;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.position {
+  padding-bottom: 0.3rem;
+  text-align: center;
+}
+
+.icons .text-center{
+  padding: 0.5rem;
 }

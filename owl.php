@@ -10,7 +10,7 @@
             <div class="owl-stage-outer">
                 <div class="owl-stage">
                 <?php
-                    $select_products = mysqli_query($conn, "SELECT * FROM `products`");
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where category not in ('Upcoming Release')");
                     if(mysqli_num_rows($select_products) > 0 ){
                     while($row = mysqli_fetch_assoc($select_products)){
                 ?>

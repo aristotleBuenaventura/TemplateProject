@@ -86,6 +86,36 @@ if(isset($message)){
 ?>
     <?php include 'header.php' ?>
 
+    <!-- Banner -->
+    <div class="container mt-4 mb-4 banner ">
+        <div id="carouselExampleIndicators" class="carousel slide  carousel_product" data-ride="carousel" data-interval="4000">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner rounded-mid">
+              <div class="carousel-item active carousel_item_product">
+                <img src="images/banner4.png" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item carousel_item_product">
+                <img src="images/banner5.jpg" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item carousel_item_product">
+                <img src="images/banner6.png" class="d-block w-100" alt="...">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+    </div>
+
 
 <div class="container">
     <div class="row">
@@ -121,7 +151,7 @@ if(isset($message)){
                       </div>
                       <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                         <?php
-                          $select_products = mysqli_query($conn, "SELECT * FROM `products` ");
+                          $select_products = mysqli_query($conn, "SELECT * FROM `products` where category not in ('Upcoming Release')");
                           if(mysqli_num_rows($select_products) > 0 ){
                         
                               while($row = mysqli_fetch_assoc($select_products)){

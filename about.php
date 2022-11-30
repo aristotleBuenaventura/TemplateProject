@@ -47,26 +47,34 @@ if($resultCheck > 0) {
         <div class="text-center aboutTitle">
             <h3>Comfort and Classic Quality and Style</h3>
         </div>
-        <div class="text-center fw-lighter">
-            <h3 class="fw-lighter mt-3"> 
-                For each one of those shoe sweethearts out there, Shoe Crew <br>
-                offer the one-stop goal to pick the correct match of footwear. <br>
-                To satisfy the affection for shoes, we offer heaps of alternatives <br>
-                from driving footwear marks, all under one rooftop. Gone are the days  <br>
+        <div class="row">
+          <div class="col">
+            <h4 class="fw-light mt-5"> 
+                For each one of those shoe sweethearts out there, Shoe Crew 
+                offer the one-stop goal to pick the correct match of footwear. 
+                To satisfy the affection for shoes, we offer heaps of alternatives 
+                from driving footwear marks, all under one rooftop. Gone are the days  
                 when you needed to go from store to store to locate the correct style and 
-                size for yourself. <br>
-                At Shoe Crew,, you can locate a vast accumulation of dashing footwear <br>
-                in all sizes and styles, all inside a couple of snaps. <br>
+                size for yourself.
+                At Shoe Crew,, you can locate a vast accumulation of dashing footwear 
+                in all sizes and styles, all inside a couple of snaps. 
                 <br>
-                Devoted to satisfying your shopping wants with no inconvenience, we ensure <br>
-                that you encounter smooth web based requesting background. Our intriguing accumulation <br>
-                of elegantly insightful footwear is accessible at astonishing costs that will really <br>
-                shock you. So be a shoe-holic with Shoe Crew. <br>
-                <img src="images/store.jpg" class="mt-5"><br>
+                <br>
+                Devoted to satisfying your shopping wants with no inconvenience, we ensure 
+                that you encounter smooth web based requesting background. Our intriguing accumulation 
+                of elegantly insightful footwear is accessible at astonishing costs that will really 
+                shock you. So be a shoe-holic with Shoe Crew.
+              </h4>
+            </div>
+            <div class="col">
+              <img src="images/store.jpg" class="mt-5"><br>
+              <div class="d-flex justify-content-center">
                 <a href="contact.php" class="btn btn-danger mt-4">Contact Us &#8594 </a>
-            </h3>
+              </div>
+          </div>
         </div>
-    </div>
+      </div>
+  </div>
 
 
  <!------- HOW IT STARTED? --------->

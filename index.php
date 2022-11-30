@@ -122,7 +122,7 @@ if(isset($_POST['product'])){
                 <img src="images/banner5.jpg" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
-                <img src="images/3.jpg" class="d-block w-100" alt="...">
+                <img src="images/banner6.png" class="d-block w-100" alt="...">
               </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -143,11 +143,11 @@ if(isset($_POST['product'])){
         <h2 id="discounted" class="title text-center">Upcoming Releases</h2>
         <div class="row">
             <?php
-            $select_products = mysqli_query($conn, "SELECT * FROM `products` where id IN (41,42,43)");
+            $select_products = mysqli_query($conn, "SELECT * FROM `products`");
             if(mysqli_num_rows($select_products) > 0 ){
           
                 while($row = mysqli_fetch_assoc($select_products)){
-                  if($row['category'] == 'Kids') {
+                  if($row['category'] == 'Upcoming Release') {
             ?>
             <div class="col-12 col-md-6 col-lg-4 text-center arrivals">
               <form action="" method="post">

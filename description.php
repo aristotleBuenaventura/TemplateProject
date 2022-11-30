@@ -110,6 +110,13 @@ if(isset($_POST['add_to_cart'])){
 </head>
 <body>
 <?php include 'header.php' ?>
+<?php
+  if(isset($message)){
+    foreach($message as $message){
+        echo '<div class="message"><span>'.$message.'</span> <i class="fas fa-times" onclick="this.parentElement.style.display = `none`;"></i> </div>';
+    };
+  };
+?>
 
    <!-- Product section-->
    <section class="py-5">
@@ -130,9 +137,22 @@ if(isset($_POST['add_to_cart'])){
                             <input type="hidden" name="product_price" value="<?php echo $product_price; ?>">
                             <input type="hidden" name="product_image" value="<?php echo $product_image; ?>">
                             <div class="d-flex">
-                              <input class="form-control text-center me-3" id="inputQuantity" type="number" min="1" value="1" style="max-width: 5rem" name="quantity"/>
-                              <input class="btn btn-outline-dark flex-shrink-0 btn btn-info text-white" type="submit" name="add_to_cart" value="Add to cart">
-                              <input class="btn btn-outline-dark flex-shrink-0 btn btn-success text-white ms-4" type="submit" name="order_now" value="Buy now">
+                              <?php 
+                                if($product_category != 'Upcoming Release'){
+                              ?>
+                                <input class="form-control text-center me-3" id="inputQuantity" type="number" min="1" value="1" style="max-width: 5rem" name="quantity"/>
+                                <input class="btn btn-outline-dark flex-shrink-0 btn btn-info text-white" type="submit" name="add_to_cart" value="Add to cart">
+                                <input class="btn btn-outline-dark flex-shrink-0 btn btn-success text-white ms-4" type="submit" name="order_now" value="Buy now">
+                              <?php
+                                } else{
+                                  ?>
+                                <input class="form-control text-center me-3" id="inputQuantity" type="number" min="1" value="1" style="max-width: 5rem" name="quantity" disabled/>
+                                <input class="btn  flex-shrink-0 btn btn-info text-white" type="submit" name="add_to_cart" value="Add to cart" disabled>
+                                <input class="btn  flex-shrink-0 btn btn-success text-white ms-4" type="submit" name="order_now" value="Buy now" disabled> 
+                                <div class="fw-bold ms-4 d-flex align-items-center text-danger">Not Yet Available</div>
+                                  <?php
+                                }
+                              ?>
                             </div>
                           </form>
                         </div>
