@@ -17,19 +17,19 @@ if(isset($_GET['remove'])){
    mysqli_query($conn, "DELETE FROM `cart` WHERE id = '$remove_id'");
    header('location:cart.php');
 };
-
-if(isset($_GET['delete_all'])){
-   mysqli_query($conn, "DELETE FROM `cart`");
-   header('location:cart.php');
-}
-
-
-
 if (isset($_SESSION['email'])){
     $email = $_SESSION['email'];
   } else {
     $email = "";
   }
+
+if(isset($_GET['delete_all'])){
+   mysqli_query($conn, "DELETE FROM `cart` where email='$email' and payment='Unpaid'");
+   header('location:cart.php');
+}
+
+
+
 
   $result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
   $resultCheck = mysqli_num_rows($result);

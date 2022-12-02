@@ -7,9 +7,34 @@
       $email = "";
     }
 
+    if (isset($_GET['amount'])){
+      $amount = $_GET['amount'];
+    } else {
+      $amount = "";
+    }
+
+    if (isset($_GET['credit_payment'])){
+      $credit = $_GET['credit_payment'];
+    } else {
+      $credit = "";
+    }
+
+    $result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
+    $resultCheck = mysqli_num_rows($result);
+
+    if($resultCheck > 0) {
+      while($row = mysqli_fetch_assoc($result)) {
+        $balanceDB = $row['balance'];
+      }
+    }
+    
+    if($credit == 'true'){
+      $remainingBalance = $balanceDB - $amount;
+      mysqli_query($conn,"UPDATE registration SET balance = '$remainingBalance' where email = '$email'");
+    }
+    
     $res=mysqli_query($conn,"select id from cart where email = '$email'");
     $row=mysqli_fetch_array($res);
-
     mysqli_query($conn,"UPDATE cart SET payment = 'Paid' where email = '$email'");
 
 ?>

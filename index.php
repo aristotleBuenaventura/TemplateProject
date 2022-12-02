@@ -110,20 +110,48 @@ if(isset($_POST['product'])){
     <div class="container mt-4 mb-4 banner ">
         <div id="carouselExampleIndicators" class="carousel slide " data-ride="carousel" data-interval="4000">
             <div class="carousel-indicators">
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            <?php 
+                  $select_banner = mysqli_query($conn, "SELECT * FROM `carousel`");
+                  $count1=0;
+                  $count_item=1;
+                  if(mysqli_num_rows($select_banner) > 0 ){
+                      while($row = mysqli_fetch_assoc($select_banner)){
+                        if($count1 < 1){
+                          $active_button = 'active';
+                          $true='true';
+                        } else {
+                          $active_button = '';
+                          $true='';
+                        }
+                ?>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<?php echo $count_item-1 ?>" class="<?php echo $active_button ?>" aria-current="<?php echo $true ?>" aria-label="Slide <?php echo $count_item ?>"></button>
+              <?php
+                      $count1++;
+                      $count_item++;
+                    }  
+                  }
+                ?>
             </div>
-            <div class="carousel-inner rounded-mid">
-              <div class="carousel-item active">
-                <img src="images/banner4.png" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="images/banner5.jpg" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="images/banner6.png" class="d-block w-100" alt="...">
-              </div>
+            <div class="carousel-inner rounded-mid">  
+                <?php 
+                  $select_banner = mysqli_query($conn, "SELECT * FROM `carousel`");
+                  $count2=0;
+                  if(mysqli_num_rows($select_banner) > 0 ){
+                      while($row = mysqli_fetch_assoc($select_banner)){
+                        if($count2 < 1){
+                          $active_item = 'active';
+                        } else {
+                          $active_item = '';
+                        }
+                ?>
+                  <div class="carousel-item <?php echo $active_item ?> carousel_item_product">
+                    <img src="uploaded_img/<?php echo $row['image']; ?>" class="d-block w-100" alt="...">
+                  </div>
+                <?php
+                      $count2++;
+                    }  
+                  }
+                ?>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>

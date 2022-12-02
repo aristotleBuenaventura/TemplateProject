@@ -74,7 +74,7 @@ if(isset($_POST['add_to_cart'])){
   $product_image = $_POST['product_image'];
   $product_quantity = $_POST['quantity'];
 
-  $select_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_name' and payment = 'Unpaid'");
+  $select_cart = mysqli_query($conn, "SELECT * FROM `cart` WHERE name = '$product_name' and payment = 'Unpaid' and email='$email'");
 
   if (isset($_SESSION['email'])){ 
       if(mysqli_num_rows($select_cart) > 0){

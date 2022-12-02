@@ -24,7 +24,7 @@ if($resultCheck > 0) {
       $mobileNoDB = $row['mobileNo'];
       $genderDB = $row['gender'];
       $imageDB =$row['image'];
-    
+      $balanceDB = $row['balance'];
     }
   }
 
@@ -142,13 +142,15 @@ body {
                     <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="Enter Mobile Number" required name="mobileNo_update" value="<?php echo $mobileNoDB; ?>"></div>
                     <div class="col-md-12"><label class="labels">Gender</label><input type="text" class="form-control" placeholder="Enter Gender" required name="gender_update" value="<?php echo $genderDB; ?>"></div>
                     <input type="file" class="box mt-3 ms-2" name="update_p_image" required accept="image/png, image/jpg, image/jpeg">
-                
-            
-            
-
          </div>
                 <div class="mt-5 text-center"><input type="submit" value="Save Profile" name="update_profile" class="btn btn-success"></div>
                       </form>
+                      <div class="row mt-2 mb-5">
+                      <div class="col border rounded border-dark mt-5" >
+                        <h5 class="text-start mt-2 fw-light">Your current balance</h5>
+                        <h4 class="text-start mt-3">₱ <?php echo number_format($balanceDB); ?>.00</h4>
+                      </div>
+          </div>
             </div>
         </div>
         <div class="col-md-4">

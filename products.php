@@ -89,21 +89,49 @@ if(isset($message)){
     <!-- Banner -->
     <div class="container mt-4 mb-4 banner ">
         <div id="carouselExampleIndicators" class="carousel slide  carousel_product" data-ride="carousel" data-interval="4000">
-            <div class="carousel-indicators">
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+        <div class="carousel-indicators">
+            <?php 
+                  $select_banner = mysqli_query($conn, "SELECT * FROM `carousel`");
+                  $count1=0;
+                  $count_item=1;
+                  if(mysqli_num_rows($select_banner) > 0 ){
+                      while($row = mysqli_fetch_assoc($select_banner)){
+                        if($count1 < 1){
+                          $active_button = 'active';
+                          $true='true';
+                        } else {
+                          $active_button = '';
+                          $true='';
+                        }
+                ?>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="<?php echo $count_item-1 ?>" class="<?php echo $active_button ?>" aria-current="<?php echo $true ?>" aria-label="Slide <?php echo $count_item ?>"></button>
+              <?php
+                      $count1++;
+                      $count_item++;
+                    }  
+                  }
+                ?>
             </div>
-            <div class="carousel-inner rounded-mid">
-              <div class="carousel-item active carousel_item_product">
-                <img src="images/banner4.png" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item carousel_item_product">
-                <img src="images/banner5.jpg" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item carousel_item_product">
-                <img src="images/banner6.png" class="d-block w-100" alt="...">
-              </div>
+            <div class="carousel-inner rounded-mid">  
+                <?php 
+                  $select_banner = mysqli_query($conn, "SELECT * FROM `carousel`");
+                  $count2=0;
+                  if(mysqli_num_rows($select_banner) > 0 ){
+                      while($row = mysqli_fetch_assoc($select_banner)){
+                        if($count2 < 1){
+                          $active_item = 'active';
+                        } else {
+                          $active_item = '';
+                        }
+                ?>
+                  <div class="carousel-item <?php echo $active_item ?> carousel_item_product">
+                    <img src="uploaded_img/<?php echo $row['image']; ?>" class="d-block w-100" alt="...">
+                  </div>
+                <?php
+                      $count2++;
+                    }  
+                  }
+                ?>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
               <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -122,20 +150,47 @@ if(isset($message)){
         <div class="col col-12 col-md-2">
         <div class="flex">
           <div class="tab my-4 mt-5">
+            <p class="h4">Filter</p>
+            <p class="">By Category</p>
             <div>
-              <button class="tablinks button-27 mb-3" onclick="openCity(event, 'All')" id="defaultOpen">All</button>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'All')" id="defaultOpen">All</button>
             </div>
             <div>
-              <button class="tablinks button-27 mb-3" onclick="openCity(event, 'Men')">Men</button>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Men')">Men</button>
             </div>
             <div>
-              <button class="tablinks button-27 mb-3" onclick="openCity(event, 'Women')">Women</button>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Women')">Women</button>
             </div>
             <div>
-              <button class="tablinks button-27 mb-3" onclick="openCity(event, 'Unisex')">Unisex</button>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Unisex')">Unisex</button>
             </div>
             <div>
               <button class="tablinks button-27 mb-3" onclick="openCity(event, 'Kids')">Kids</button>
+            </div>
+            <p class="">By Brand</p>
+            <div>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Under Armour')">Under Armour</button>
+            </div>
+            <div>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Anta')">Anta</button>
+            </div>
+            <div>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Nike')">Nike</button>
+            </div>
+            <div>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Jordan')">Jordan</button>
+            </div>
+            <div>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Adidas')">Adidas</button>
+            </div>
+            <div>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Vans')">Vans</button>
+            </div>
+            <div>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Converse')">Converse</button>
+            </div>
+            <div>
+              <button class="tablinks button-27 mb-1" onclick="openCity(event, 'Puma')">Puma</button>
             </div>
           </div>
         </div>
@@ -341,6 +396,342 @@ if(isset($message)){
             </section>
           </div>    
         </div>
+
+        <div id="Under Armour" class="tabcontent">
+          <div class="row">
+            <section class="py-5">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4">Under Armour</span>
+              </div>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  
+                  <?php
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where name like '%under%'");
+                    if(mysqli_num_rows($select_products) > 0 ){
+                        while($row = mysqli_fetch_assoc($select_products)){
+                          
+                    ?>
+                      <div class="col mb-5 text-center hoverBox">
+                          <div class="card h-100 text-center border border-gray productBorder">
+                            <form action="" method="post">
+                              <button class="button_product" name="product">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" class="image_hover">
+                                  <h4 ><?php echo $row['name']; ?></h4>
+                                  <div >₱<?php echo number_format($row['price']); ?></div>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                  <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>">
+                                  <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>">
+                              </button>
+                          </form>
+                          </div>
+                      </div>
+                    <?php
+                          }
+                    
+                    }
+                  ?>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>
+
+        <div id="Anta" class="tabcontent">
+          <div class="row">
+            <section class="py-5">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4">Anta</span>
+              </div>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  
+                  <?php
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where name like '%Anta%'");
+                    if(mysqli_num_rows($select_products) > 0 ){
+                        while($row = mysqli_fetch_assoc($select_products)){
+                          
+                    ?>
+                      <div class="col mb-5 text-center hoverBox">
+                          <div class="card h-100 text-center border border-gray productBorder">
+                            <form action="" method="post">
+                              <button class="button_product" name="product">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" class="image_hover">
+                                  <h4 ><?php echo $row['name']; ?></h4>
+                                  <div >₱<?php echo number_format($row['price']); ?></div>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                  <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>">
+                                  <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>">
+                              </button>
+                          </form>
+                          </div>
+                      </div>
+                    <?php
+                          }
+                    
+                    }
+                  ?>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>       
+        
+        <div id="Nike" class="tabcontent">
+          <div class="row">
+            <section class="py-5">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4">Nike</span>
+              </div>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  
+                  <?php
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where name like '%Nike%'");
+                    if(mysqli_num_rows($select_products) > 0 ){
+                        while($row = mysqli_fetch_assoc($select_products)){
+                          
+                    ?>
+                      <div class="col mb-5 text-center hoverBox">
+                          <div class="card h-100 text-center border border-gray productBorder">
+                            <form action="" method="post">
+                              <button class="button_product" name="product">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" class="image_hover">
+                                  <h4 ><?php echo $row['name']; ?></h4>
+                                  <div >₱<?php echo number_format($row['price']); ?></div>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                  <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>">
+                                  <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>">
+                              </button>
+                          </form>
+                          </div>
+                      </div>
+                    <?php
+                          }
+                    
+                    }
+                  ?>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>   
+        
+        <div id="Jordan" class="tabcontent">
+          <div class="row">
+            <section class="py-5">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4">Jordan</span>
+              </div>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  
+                  <?php
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where name like '%Jordan%'");
+                    if(mysqli_num_rows($select_products) > 0 ){
+                        while($row = mysqli_fetch_assoc($select_products)){
+                          
+                    ?>
+                      <div class="col mb-5 text-center hoverBox">
+                          <div class="card h-100 text-center border border-gray productBorder">
+                            <form action="" method="post">
+                              <button class="button_product" name="product">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" class="image_hover">
+                                  <h4 ><?php echo $row['name']; ?></h4>
+                                  <div >₱<?php echo number_format($row['price']); ?></div>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                  <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>">
+                                  <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>">
+                              </button>
+                          </form>
+                          </div>
+                      </div>
+                    <?php
+                          }
+                    
+                    }
+                  ?>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>  
+        
+        <div id="Adidas" class="tabcontent">
+          <div class="row">
+            <section class="py-5">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4">Adidas</span>
+              </div>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  
+                  <?php
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where name like '%Adidas%'");
+                    if(mysqli_num_rows($select_products) > 0 ){
+                        while($row = mysqli_fetch_assoc($select_products)){
+                          
+                    ?>
+                      <div class="col mb-5 text-center hoverBox">
+                          <div class="card h-100 text-center border border-gray productBorder">
+                            <form action="" method="post">
+                              <button class="button_product" name="product">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" class="image_hover">
+                                  <h4 ><?php echo $row['name']; ?></h4>
+                                  <div >₱<?php echo number_format($row['price']); ?></div>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                  <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>">
+                                  <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>">
+                              </button>
+                          </form>
+                          </div>
+                      </div>
+                    <?php
+                          }
+                    
+                    }
+                  ?>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>  
+
+        <div id="Vans" class="tabcontent">
+          <div class="row">
+            <section class="py-5">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4">Vans</span>
+              </div>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  
+                  <?php
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where name like '%Vans%'");
+                    if(mysqli_num_rows($select_products) > 0 ){
+                        while($row = mysqli_fetch_assoc($select_products)){
+                          
+                    ?>
+                      <div class="col mb-5 text-center hoverBox">
+                          <div class="card h-100 text-center border border-gray productBorder">
+                            <form action="" method="post">
+                              <button class="button_product" name="product">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" class="image_hover">
+                                  <h4 ><?php echo $row['name']; ?></h4>
+                                  <div >₱<?php echo number_format($row['price']); ?></div>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                  <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>">
+                                  <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>">
+                              </button>
+                          </form>
+                          </div>
+                      </div>
+                    <?php
+                          }
+                    
+                    }
+                  ?>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>  
+
+        <div id="Converse" class="tabcontent">
+          <div class="row">
+            <section class="py-5">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4">Converse</span>
+              </div>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  
+                  <?php
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where name like '%Converse%'");
+                    if(mysqli_num_rows($select_products) > 0 ){
+                        while($row = mysqli_fetch_assoc($select_products)){
+                          
+                    ?>
+                      <div class="col mb-5 text-center hoverBox">
+                          <div class="card h-100 text-center border border-gray productBorder">
+                            <form action="" method="post">
+                              <button class="button_product" name="product">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" class="image_hover">
+                                  <h4 ><?php echo $row['name']; ?></h4>
+                                  <div >₱<?php echo number_format($row['price']); ?></div>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                  <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>">
+                                  <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>">
+                              </button>
+                          </form>
+                          </div>
+                      </div>
+                    <?php
+                          }
+                    
+                    }
+                  ?>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>  
+
+        <div id="Puma" class="tabcontent">
+          <div class="row">
+            <section class="py-5">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4">Puma</span>
+              </div>
+                <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                  
+                  <?php
+                    $select_products = mysqli_query($conn, "SELECT * FROM `products` where name like '%Puma%'");
+                    if(mysqli_num_rows($select_products) > 0 ){
+                        while($row = mysqli_fetch_assoc($select_products)){
+                          
+                    ?>
+                      <div class="col mb-5 text-center hoverBox">
+                          <div class="card h-100 text-center border border-gray productBorder">
+                            <form action="" method="post">
+                              <button class="button_product" name="product">
+                                  <img src="uploaded_img/<?php echo $row['image']; ?>" alt="" height="150px" class="image_hover">
+                                  <h4 ><?php echo $row['name']; ?></h4>
+                                  <div >₱<?php echo number_format($row['price']); ?></div>
+                                  <input type="hidden" name="product_id" value="<?php echo $row['id']; ?>">
+                                  <input type="hidden" name="product_name" value="<?php echo $row['name']; ?>">
+                                  <input type="hidden" name="product_price" value="<?php echo $row['price']; ?>">
+                                  <input type="hidden" name="product_image" value="<?php echo $row['image']; ?>">
+                              </button>
+                          </form>
+                          </div>
+                      </div>
+                    <?php
+                          }
+                    
+                    }
+                  ?>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>  
+
+
+
+
+
+
+
+
         </div>
     </div>
 </div>    

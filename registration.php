@@ -26,8 +26,8 @@ if (isset($_POST['submit'])) {
     if ($password === $cpassword) {
       $users = getUserByEmail($conn, $email);
       if ($users->num_rows === 0) {
-        $sql = "INSERT INTO registration (username, email, firstname, lastname, password, role,address,birthday,mobileNo,gender,image)
-                    VALUES ('$username', '$email', '$firstname', '$lastname','$password', '$role','','','','','loginIcon.jpeg')";
+        $sql = "INSERT INTO registration (username, email, firstname, lastname, password, role,address,birthday,mobileNo,gender,image,balance)
+                    VALUES ('$username', '$email', '$firstname', '$lastname','$password', '$role','','','','','loginIcon.jpeg','0')";
             $result = mysqli_query($conn, $sql);
             if ($result) {
               $_SESSION["firstname"] = $firstname;
