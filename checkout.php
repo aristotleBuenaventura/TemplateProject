@@ -44,7 +44,8 @@ if(isset($_POST['update_profile'])){
   }
 
 }
-
+$_SESSION['shipping'] = 80;
+$_SESSION['paypalPayment'] = 'false';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,8 +76,8 @@ if(isset($_POST['update_profile'])){
               <div class="col-md-6"><label class="labels">Enter Last Name</label><input type="text" class="form-control" required name="lastname_update" value="<?php echo $lastnameDB; ?>" placeholder="surname"></div>
           </div>
           <div class="row mt-3">
-                <div class="col-md-12"><label class="labels">Address</label><input type="text" class="form-control" placeholder="Enter Address" required name="address_update" value="<?php echo $addressDB; ?>"></div>
-                <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control" placeholder="Enter Mobile Number" required name="mobileNo_update" value="<?php echo $mobileNoDB; ?>"></div>
+                <div class="col-md-12"><label class="labels">Address</label><input type="text" class="form-control " id="address" placeholder="Enter Address" required name="address_update" value="<?php echo $addressDB; ?>"></div>
+                <div class="col-md-12"><label class="labels">Mobile Number</label><input type="text" class="form-control " id="mobileNumber" placeholder="Enter Mobile Number" required name="mobileNo_update" value="<?php echo $mobileNoDB; ?>"></div>
           </div>
 
           <div class="mt-3 text-center"><input type="submit" value="Save Billing Details" name="update_profile" class="btn btn-success"></div>
@@ -119,9 +120,9 @@ if(isset($_POST['update_profile'])){
                 $total = 0;
                 $grand_total = 0;
                 $count = 1;
-                if(mysqli_num_rows($select_cart) > 0){
-                    while($fetch_cart = mysqli_fetch_assoc($select_cart)){
-                    $total_price = number_format($fetch_cart['price'] * $fetch_cart['quantity']);
+              if(mysqli_num_rows($select_cart) > 0){
+                while($fetch_cart = mysqli_fetch_assoc($select_cart)){
+                $total_price = number_format($fetch_cart['price'] * $fetch_cart['quantity']);
             ?>
             
 
@@ -141,6 +142,8 @@ if(isset($_POST['update_profile'])){
                 }
             }else{
                 echo "<div class='display-order'><span>Your cart is empty!</span></div>";
+                $_SESSION['total'] = 0;
+                $_SESSION['shipping'] = 0;
             }
             ?>
             <div class="row payment_area">
@@ -152,7 +155,7 @@ if(isset($_POST['update_profile'])){
               </div>
               <div class="col col-6 mt-4 mb-2">
                 <h5 class="grand-total text-end fw-light">₱<?= number_format($_SESSION['total']); ?>.00</h5>
-                <h5 class="grand-total text-end fw-light">₱80.00</h5>
+                <h5 class="grand-total text-end fw-light">₱<?= number_format($_SESSION['shipping']); ?>.00</h5>
                 <h5 class="grand-total text-end fw-light">₱<?= number_format(($_SESSION['total']*.12)); ?>.00</h5>
                 
               </div>
@@ -163,19 +166,27 @@ if(isset($_POST['update_profile'])){
                 <h4 class="grand-total ">Total : </h4>
               </div>
               <div class="col col-6 mt-3 mb-3">
-                <h4 class="grand-total text-end ">₱<?= number_format(($_SESSION['total']*.12)+($_SESSION['total'])+80); ?>.00</h4>
+                <h4 class="grand-total text-end ">₱<?= number_format(($_SESSION['total']*.12)+($_SESSION['total'])+$_SESSION['shipping']); ?>.00</h4>
               </div>
             </div>
             <?php
-                $_SESSION['grand_total'] = ($_SESSION['total']*.12)+($_SESSION['total'])+80;
+                $_SESSION['grand_total'] = ($_SESSION['total']*.12)+($_SESSION['total'])+$_SESSION['shipping'];
             ?>
             
-    
+            <?php
+              if ($_SESSION['grand_total'] > 0){
+                ?>
+
             <div id="smart-button-container" class="mt-4 paypal"  style='display:none'>
                 <div style="text-align: center;">
                     <div id="paypal-button-container"></div>
                 </div>
             </div>
+
+            <?php
+
+              }
+            ?>
             <div class="mt-4 credit"  style='display:none'>
             <?php
               if($balanceDB <= $_SESSION['grand_total']){
@@ -186,7 +197,7 @@ if(isset($_POST['update_profile'])){
                   </div>
                 </div>
                 <?php
-              } else{
+              } else if ($_SESSION['grand_total'] > 0){
                 ?>
               <div id="smart-button-container"  >
                   <div style="text-align: center;">
@@ -219,36 +230,48 @@ if(isset($_POST['update_profile'])){
   
   <script>
     function openPayPal() {
-      var paypal = document.querySelector(".paypal");
-      var credit = document.querySelector(".credit");
-      var credit_balance = document.querySelector(".credit_balance");
-      if (paypal.style.display === "none") {
-        paypal.style.display = "block";
-        credit.style.display = "none";
-        credit_balance.style.display = "none";
-      } else {
-        paypal.style.display = "none";
+      var address = document.querySelector("#address").value;
+      var mobileNumber = document.querySelector("#mobileNumber").value;
+      if(address == '' || mobileNumber == ''){
+        alert("Please complete your billing details");
+      } else { 
+        var paypal = document.querySelector(".paypal");
+        var credit = document.querySelector(".credit");
+        var credit_balance = document.querySelector(".credit_balance");
+        if (paypal.style.display === "none") {
+          paypal.style.display = "block";
+          credit.style.display = "none";
+          credit_balance.style.display = "none";
+        } else {
+          paypal.style.display = "none";
+        }
       }
     }
   </script>  
   
   <script>
     function openCredit() {
-      var credit = document.querySelector(".credit");
-      var paypal = document.querySelector(".paypal");
-      var credit_balance = document.querySelector(".credit_balance");
-      if (credit.style.display === "none") {
-        credit.style.display = "block";
-        credit_balance.style.display = "block";
-        paypal.style.display = "none";
-      } else {
-        credit.style.display = "none";
+      var address = document.querySelector("#address").value;
+      var mobileNumber = document.querySelector("#mobileNumber").value;
+      if(address == '' || mobileNumber == ''){
+        alert("Please complete your billing details");
+      } else { 
+        var credit = document.querySelector(".credit");
+        var paypal = document.querySelector(".paypal");
+        var credit_balance = document.querySelector(".credit_balance");
+        if (credit.style.display === "none") {
+          credit.style.display = "block";
+          credit_balance.style.display = "block";
+          paypal.style.display = "none";
+        } else {
+          credit.style.display = "none";
+        }
       }
     }
   </script>
   <script src="https://www.paypal.com/sdk/js?client-id=AeDTpoaJbhsPiqF5ST2NBlUvOTM9u4dgvVZycMEmGmwCPLmriWcXb1v-NoZVY-rzp9EcJ9_zoIoiMcr9&currency=PHP" data-sdk-integration-source="button-factory"></script>
   <script>
-  var total = parseInt('<?php echo $_SESSION['grand_total']+1; ?>');
+  var total = parseInt('<?php echo $_SESSION['grand_total']; ?>');
 
 </script>
   <script>
@@ -276,8 +299,9 @@ if(isset($_POST['update_profile'])){
 
           // Show a success message within this page, e.g.
           const element = document.getElementById('paypal-button-container');
-         
-          window.location.href = "success.php?amount=" + total;
+          sessionStorage.setItem("paypal", 'true');
+        
+          window.location.href = "success.php?";
 
           // Or go to another URL:  actions.redirect('thank_you.html');
           
@@ -294,7 +318,7 @@ if(isset($_POST['update_profile'])){
 
 <script>
     function creditPayment(){
-      window.location.href = "success.php?amount=" + total + "&credit_payment=true";
+      window.location.href = "success.php?credit_payment=true";
     }
   </script>  
 

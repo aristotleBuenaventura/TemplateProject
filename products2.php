@@ -59,25 +59,6 @@ if (isset($_SESSION['email'])){
     }
   }
 
-if(isset($_GET['page_no']) && $_GET['page_no'] !== ""){
-  $page_no = $_GET['page_no'];
-} else {
-  $page_no = 1;
-}
-
-$total_records_per_page = 12;
-$offset = ($page_no - 1) * $total_records_per_page;
-
-$previous_page = $page_no - 1;
-$next_page = $page_no + 1;
-
-$result_count = mysqli_query($conn, "SELECT COUNT(*) as total_records FROM `products` where category not in ('Upcoming Release')");
-
-$records = mysqli_fetch_array($result_count);
-
-$total_records = $records['total_records'];
-
-$total_no_of_pages = ceil($total_records / $total_records_per_page);
 ?>
 
 <!DOCTYPE html>
@@ -225,7 +206,7 @@ if(isset($message)){
                       </div>
                       <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                         <?php
-                          $select_products = mysqli_query($conn, "SELECT * FROM `products` where category not in ('Upcoming Release') LIMIT $offset, $total_records_per_page");
+                          $select_products = mysqli_query($conn, "SELECT * FROM `products` where category not in ('Upcoming Release')");
                           if(mysqli_num_rows($select_products) > 0 ){
                         
                               while($row = mysqli_fetch_assoc($select_products)){
@@ -250,37 +231,10 @@ if(isset($message)){
                           }
                           ?>
                       </div>
-
                     </div>
-                    <div class="container d-flex justify-content-center pages">
-                      <nav aria-label="Page navigation example">
-                        <ul class="pagination">
-                          <li class="page-item <?= ($page_no <=1) ?
-                           ' disabled ' : '';?>"><a class="page-link " <?= ($page_no > 1)? 'href=?page_no=' .
-                           $previous_page : '';?>>Previous</a></li>
-
-                          <?php 
-                            for($counter = 1; $counter <=$total_no_of_pages; $counter++){
-                            ?>
-                            <?php if($page_no != $counter){ ?>
-                              <li class="page-item"><a class="page-link " href="?
-                              page_no=<?= $counter;?>"><?= $counter;?></a></li>
-                          <?php }else{ ?>
-                              <li class="page-item active"><a class="page-link"><?=
-                                 $counter;?> </a></li>
-                              <?php }  ?>
-                            <?php } ?>
-                          <li class="page-item <?= ($page_no >=$total_no_of_pages)? 'disabled' : '';?>"><a class="page-link" <?= ($page_no < $total_no_of_pages)? 'href=?page_no=' .$next_page : '';?>>Next</a></li>
-                        </ul>
-                      </nav> 
-                    </div>
-                    <div class="container d-flex justify-content-center p-10">
-                      <strong>Page <?php echo $page_no; ?> of <?php echo $total_no_of_pages; ?></strong>
-                    </div>     
                   </section>
               </div>
         </div>
-
         <div id="Men" class="tabcontent">
           <div class="row">
               <section class="py-5">

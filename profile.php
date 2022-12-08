@@ -44,8 +44,8 @@ if($resultCheck > 0) {
  
     if($update_query){
        move_uploaded_file($update_p_image_tmp_name, $update_p_image_folder);
-       $message[] = 'Profile Updated Succesfully';
-       header('location:profile.php');
+       $message[] = 'Success';
+
     }else{
        $message[] = 'Profile could not be Updated';
        header('location:profile.php');
@@ -118,6 +118,17 @@ body {
 </style>
 
 <?php include 'header.php' ?>
+<?php
+  if(isset($message)){
+    foreach($message as $message){
+        if ($message == 'Success'){
+        echo '<div class="container alert alert-success alert-dismissible fade show" role="alert">
+        <strong>Success!</strong> Profile Information has been successfully saved. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+    }
+    };
+  };
+?>
 
 
 <div class="container rounded bg-light mt-5 mb-5">

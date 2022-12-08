@@ -12,8 +12,15 @@ if (isset($_SESSION['email'])){
 if(isset($_POST["submit"]))
 {
     mysqli_query($conn,"insert into inquiries values(NULL,'$_POST[name]','$_POST[email]','$_POST[subject]','$_POST[message]')");
-    $message[] = 'Success';
-     
+    ?>
+    
+    <script type="text/javascript">
+        alert("Inquiry has been successfully submitted");
+        window.location.href=window.location.href;
+    </script>
+
+
+    <?php
 }
 
   $result = mysqli_query($conn,"SELECT * FROM registration WHERE email='$email'");
@@ -44,17 +51,7 @@ if(isset($_POST["submit"]))
 </head>
 <body>
 <?php include 'header.php' ?>
-<?php
-  if(isset($message)){
-    foreach($message as $message){
-        if ($message == 'Success'){
-        echo '<div class="container alert alert-success alert-dismissible fade show" role="alert">
-        <strong>Success!</strong> Your message has been successfully sent. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>';
-    }
-    };
-  };
-?>
+
     
     
     <div class="container mb-5">
@@ -75,31 +72,31 @@ if(isset($_POST["submit"]))
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label class="label mt-4" for="name">Full Name</label>
-                                                <input type="text" required class="form-control" name="name" id="name" placeholder="Name">
+                                                <label class="label" for="name">Full Name</label>
+                                                <input type="text" class="form-control" name="name" id="name" placeholder="Name">
                                             </div>
                                         </div>
                                         <div class="col-md-6"> 
                                             <div class="form-group">
-                                                <label class="label mt-4" for="email">Email Address</label>
-                                                <input type="email" required class="form-control" name="email" id="email" placeholder="Email">
+                                                <label class="label" for="email">Email Address</label>
+                                                <input type="email" class="form-control" name="email" id="email" placeholder="Email">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
                                             <div class="form-group">
-                                                <label class="label mt-4" for="subject">Subject</label>
-                                                <input type="text" required class="form-control" name="subject" id="subject" placeholder="Subject">
+                                                <label class="label" for="subject">Subject</label>
+                                                <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject">
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-group mt-4">
+                                            <div class="form-group">
                                                 <label class="label" for="#">Message</label>
-                                                <textarea required name="message" class="form-control" id="message" cols="30" rows="4" placeholder="Message"></textarea>
+                                                <textarea name="message" class="form-control" id="message" cols="30" rows="4" placeholder="Message"></textarea>
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-group mt-4">
-                                                <input type="submit" name="submit" value="Send Message" class="btn btn-danger">
+                                            <div class="form-group">
+                                                <input type="submit" name="submit" value="Send Message" class="btn btn-primary">
                                                 <div class="submitting"></div>
                                             </div>
                                         </div>
@@ -108,17 +105,15 @@ if(isset($_POST["submit"]))
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-5 d-flex align-items-stretch bg-light">
-                            <div class="info-wrap bg-danger w-100 p-md-5 p-4">
+                            <div class="info-wrap bg-primary w-100 p-md-5 p-4">
                                 <h3>Let's get in touch</h3>
-<br>
-<br>
-                                <p class="mb-4">The Shoe Crew are always open for any suggestions and inquiries.</p>
+                                <p class="mb-4">We're open for any suggestion or just to have a chat</p>
                         <div class="dbox w-100 d-flex align-items-start">
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <span class="fa fa-map-marker"></span>
                             </div>
                             <div class="text pl-3">
-                            <p><span>Address:</span> Blk 7 Lot 15 Mustasa St. Tumana Marikina City</p>
+                            <p><span>Address:</span> 198 West 21th Street, Suite 721 New York NY 10016</p>
                             </div>
                         </div>
                         <div class="dbox w-100 d-flex align-items-center">
@@ -126,7 +121,7 @@ if(isset($_POST["submit"]))
                                 <span class="fa fa-phone"></span>
                             </div>
                             <div class="text pl-3">
-                            <p><span>Phone:</span>+ 1235 2355 98</a></p>
+                            <p><span>Phone:</span> <a href="tel://1234567920">+ 1235 2355 98</a></p>
                             </div>
                         </div>
                         <div class="dbox w-100 d-flex align-items-center">
@@ -134,7 +129,7 @@ if(isset($_POST["submit"]))
                                 <span class="fa fa-paper-plane"></span>
                             </div>
                             <div class="text pl-3">
-                            <p><span>Email:</span> theShoeCrew@gmail.com </a></p>
+                            <p><span>Email:</span> <a href="mailto:info@yoursite.com">info@yoursite.com</a></p>
                             </div>
                         </div>
                         <div class="dbox w-100 d-flex align-items-center">
@@ -142,7 +137,7 @@ if(isset($_POST["submit"]))
                                 <span class="fa fa-globe"></span>
                             </div>
                             <div class="text pl-3">
-                            <p><span>Website:</span> theshoecrew.tk </a></p>
+                            <p><span>Website</span> <a href="#">yoursite.com</a></p>
                             </div>
                         </div>
                     </div>

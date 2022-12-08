@@ -4,6 +4,48 @@
 
 session_start();
 
+if (isset($_POST['submit'])) {
+    
+    $username = $_POST['username'];
+    $email = $_POST['email'];
+    $firstname = $_POST['firstname'];
+    $lastname = $_POST['lastname'];
+    $password = md5($_POST['password']);
+    $cpassword = md5($_POST['cpassword']); 
+    $role = "admin";
+
+    
+    
+    if ($password === $cpassword) {
+      $users = getUserByEmail($conn, $email);
+      if ($users->num_rows === 0) {
+        $sql = "INSERT INTO registration (username, email, firstname, lastname, password, role,address,birthday,mobileNo,gender,image)
+                    VALUES ('$username', '$email', '$firstname', '$lastname','$password', '$role','','','','','loginIcon.jpeg')";
+            $result = mysqli_query($conn, $sql);
+            if ($result) {
+              $_SESSION["firstname"] = $firstname;
+              $_SESSION["lastname"] = $lastname;
+              $_SESSION["email"] = $email;
+                header('Location: admin.php');
+            } else {
+                echo "<script>alert('Woops! Something Went Wrong.')</script>";
+            }
+        } else {
+            echo "<script>alert('Woops! Email Already Exists.')</script>";
+
+        }
+
+    } else {
+        echo "<script>alert('Password Not Matched.')</script>";
+    }
+}
+
+function getUserByEmail($conn, $email) {
+    $sql = "SELECT * FROM registration WHERE email='$email'";
+    return mysqli_query($conn, $sql);
+}
+
+
 if(isset($_POST['add_product'])){
    $p_name = $_POST['p_name'];
    $p_price = $_POST['p_price'];
@@ -23,6 +65,23 @@ if(isset($_POST['add_product'])){
    }
 };
 
+if(isset($_POST['add_banner'])){
+    $b_name = $_POST['b_name'];
+    $b_image = $_FILES['b_image']['name'];
+    $b_image_tmp_name = $_FILES['b_image']['tmp_name'];
+    $b_image_folder = 'uploaded_img/'.$b_image;
+ 
+    $insert_query = mysqli_query($conn, "INSERT INTO `carousel`(name, image) VALUES('$b_name', '$b_image')") or die('query failed');
+ 
+    if($insert_query){
+       move_uploaded_file($b_image_tmp_name, $b_image_folder);
+       $message[] = 'Banner image add succesfully';
+    }else{
+       $message[] = 'Could not add the Banner Image';
+    }
+ };
+
+// DELETE PRODUCT START
 if(isset($_GET['delete_product'])){
    $delete_id = $_GET['delete_product'];
    $delete_query = mysqli_query($conn, "DELETE FROM `products` WHERE id = $delete_id ") or die('query failed');
@@ -35,6 +94,34 @@ if(isset($_GET['delete_product'])){
    };
 };
 
+if(isset($_GET['delete_banner'])){
+    $delete_id = $_GET['delete_banner'];
+    $delete_query = mysqli_query($conn, "DELETE FROM `carousel` WHERE id = $delete_id ") or die('query failed');
+    if($delete_query){
+       header('location:admin.php');
+       $message[] = 'Banner image has been deleted';
+    }else{
+       header('location:admin.php');
+       $message[] = 'Banner image could not be deleted';
+    };
+ };
+// DELETE PRODUT END
+
+// DELETE USER START
+
+if(isset($_GET['delete_user'])){
+    $user_delete_id = $_GET['delete_user'];
+    $user_delete_query = mysqli_query($conn, "DELETE FROM `registration` WHERE id = $user_delete_id ") or die('query failed');
+    if($user_delete_query){
+       header('location:admin.php');
+       $message[] = 'User has been deleted';
+    }else{
+       header('location:admin.php');
+       $message[] = 'User could not be deleted';
+    };
+ };
+
+//DELETE USER END
 if(isset($_POST['update_product'])){
    $update_p_id = $_POST['update_p_id'];
    $update_p_name = $_POST['update_p_name'];
@@ -65,15 +152,23 @@ if(isset($_POST['update_users'])){
     $update_user_id = $_POST['update_user_id'];
     $update_username = $_POST['update_username'];
     $update_email = $_POST['update_email'];
-    $update_password = $_POST['update_password'];
-    $update_role = $_POST['update_role'];
+    //MORE INFO START
+    $update_firstname = $_POST['firstname_update'];
+    $update_lastname = $_POST['lastname_update'];
+    $update_address = $_POST['address_update'];
+    $update_mobileNo= $_POST['mobileNo_update'];
+    
+    $update_user_image = $_FILES['update_user_image']['name'];
+   $update_user_image_tmp_name = $_FILES['update_user_image']['tmp_name'];
+   $update_user_image_folder = 'uploaded_img/'.$update_user_image;
+    //MORE INFO END
     
  
  
-    $update_query = mysqli_query($conn, "UPDATE `registration` SET username= '$update_username', email = '$update_email', password = '$update_password', role = '$update_role'  WHERE id = ' $update_user_id'");
+    $update_query = mysqli_query($conn, "UPDATE `registration` SET username= '$update_username', email = '$update_email', password = '$update_password', role = '$update_role',firstname = ' $update_firstname',lastname = '$update_lastname', address =' $update_address', birthday='$update_birthday', mobileNo='$update_mobileNo',gender='$update_gender', image = '$update_user_image'  WHERE id = ' $update_user_id'");
  
     if($update_query){
-       move_uploaded_file($update_p_image_tmp_name, $update_p_image_folder);
+       move_uploaded_file($update_user_image_tmp_name, $update_user_image_folder);
        $message[] = 'User updated succesfully';
        header('location:admin.php');
     }else{
@@ -174,11 +269,27 @@ if(isset($message)){
 
         <div class="container d-flex justify-content-center">
             <div class="tab my-4">
-                <button class="tablinks btn btn-dark" onclick="openCity(event, 'products')" id="defaultOpen">Add Products</button>
-                <button class="tablinks btn btn-dark" onclick="openCity(event, 'users')">List of Users</button>
+                <?php 
+                    if(isset($_GET['edit_product'])){
+                        $edit_product='defaultOpen';
+                    } else {
+                        $edit_product='';
+                    }
+                    
+                    if (isset($_GET['edit_user'])){
+                        $edit_user='defaultOpen';
+                    } else {
+                        $edit_product='defaultOpen';
+                    }
+                    
+                ?>
+                <button class="tablinks btn btn-dark" onclick="openCity(event, 'products')" id=<?php echo $edit_product ?>>Add Products</button>
+                <button class="tablinks btn btn-dark" onclick="openCity(event, 'banners')" id=<?php echo $edit_product ?>>Add Banners</button>
+                <button class="tablinks btn btn-dark" onclick="openCity(event, 'users')" id=<?php echo $edit_product ?>>List of Users</button>
                 <button class="tablinks btn btn-dark" onclick="openCity(event, 'inquiries')">Message Inquiries</button>
                 <button class="tablinks btn btn-dark" onclick="openCity(event, 'pending')">Pending Carts</button>
                 <button class="tablinks btn btn-dark" onclick="openCity(event, 'transactions')">Successful Transactions</button>
+                <button class="tablinks btn btn-dark" onclick="openCity(event, 'add_admin')">Add Admin Accounts</button>
             </div>
         </div>
 
@@ -282,23 +393,27 @@ if(isset($message)){
         <form action="" method="post" enctype="multipart/form-data">
            <img src="uploaded_img/<?php echo $fetch_edit_product['image']; ?>" height="200" alt="">
            <input type="hidden" name="update_p_id" value="<?php echo $fetch_edit_product['id']; ?>">
-           <input type="text" class="box" required name="update_p_name" value="<?php echo $fetch_edit_product['name']; ?>">
-           <input type="number" min="0" class="box" required name="update_p_price" value="<?php echo $fetch_edit_product['price']; ?>">
+           <br>
+           <br>
+           <label for="product name" class="d-flex justify-content-start ">Product Name:</label> 
+           <input type="text" class="box d-flex justify-content-start" required name="update_p_name" id='product name' value="<?php echo $fetch_edit_product['name']; ?>">
+           <label for="price" class="d-flex justify-content-start ">Price:</label> 
+           <input type="number" min="0" class="box d-flex justify-content-start" required name="update_p_price" id='price'value="<?php echo $fetch_edit_product['price']; ?>">
            <label class="d-flex justify-content-start" for="watch">Category:</label>
-                <select class="d-flex justify-content-start" name="category_update" id="watch">
-                    <option value="Men">Men</option>
-                    <option value="Women">Women</option>
-                    <option value="Unisex">Unisex</option>
-                    <option value="Kids">Kids</option>
-                    <option value="Upcoming Release">Upcoming Release</option>
+           <select class="d-flex justify-content-start " name="category_update" id="watch">
+                    <option value="Men"<?=$fetch_edit_product['category'] == 'Men' ? ' selected="selected"' : '';?>>Men</option>
+                    <option value="Women"<?=$fetch_edit_product['category'] == 'Women' ? ' selected="selected"' : '';?>>Women</option>
+                    <option value="Unisex"<?=$fetch_edit_product['category'] == 'Unisex' ? ' selected="selected"' : '';?>>Unisex</option>
+                    <option value="Kids"<?=$fetch_edit_product['category'] == 'Kids' ? ' selected="selected"' : '';?>>Kids</option>
+                    <option value="Upcoming Release"<?=$fetch_edit_product['category'] == 'Upcoming Release' ? ' selected="selected"' : '';?>>Upcoming Release</option>
                 </select>
-           <input type="file" class="box" name="update_p_image" required accept="image/png, image/jpg, image/jpeg">
-           <div class="form-group mx-4">
+           <input type="file" class="box d-flex justify-content-start" name="update_p_image" required accept="image/png, image/jpg, image/jpeg">
+           <div class="form-group">
                     <label class="label d-flex justify-content-start" for="#">Product Description:</label>
                     <textarea name="update_p_description" class="form-control mb-3" id="message" cols="30" rows="4" placeholder="Enter the Product Description"><?php echo $fetch_edit_product['description']; ?></textarea>
            </div>
-           <input type="submit" value="update the product" name="update_product" class="btn btn-warning">
-           <input type="reset" name="cancel" value="cancel" id="close-edit" class="option-btn btn btn-danger" onclick="document.querySelector('.edit-form-container').style.display = 'none';">
+           <input type="submit" value="Update" name="update_product" class="btn btn-warning">
+           <input type="reset" name="cancel" value="Cancel" id="close-edit" class="option-btn btn btn-danger" onclick="document.querySelector('.edit-form-container').style.display = 'none';">
         </form>
     </div>
 
@@ -312,11 +427,80 @@ if(isset($message)){
         echo "<script>document.querySelector('.edit-form-container').style.display = 'none';</script>";
       }
 
-      
-   ?>
+      ?>
 
 </section>
   </div>
+                    </div>
+                  </section>
+              </div>
+        </div>
+       
+        <!-- PRODUCTS END-->
+
+        <!-- Banner-->
+
+                <div id="banners" class="tabcontent">
+          <div class="row">
+                  <section class="py-5">
+                    <div class="container">
+                    <div class="mb-4">
+                          <span class="h3 mb-4"></span>
+        
+                      </div>
+                      <div class="container">
+                    <div class="row justify-content-center my-5">
+                        <div class="col col-6 text-center">
+                            <div class="border border-gray">
+                                <form action="" method="post" class="add-product-form " enctype="multipart/form-data">
+                                    <h3 class="mt-3">New Banner</h3>
+                                    <p>Name of the Banner Image: <input type="text" name="b_name" placeholder="Enter the Product" class="box" required></p>
+                                    <input type="file" name="b_image" accept="image/png, image/jpg, image/jpeg" class="box" required></p>
+                                    <div class="mt-2 mb-3">
+                                        <input type="submit" value="Add" name="add_banner" class="btn btn-success">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="display-product-table">
+
+                    <table class="table">
+
+                        <thead>
+                            <th>Name</th>
+                            <th>Banner Image</th>
+                            <th>Actions</th>
+                        </thead>
+
+                        <tbody>
+                            <?php
+                            
+                                $select_banner = mysqli_query($conn, "SELECT * FROM `carousel` ORDER BY name");
+                                if(mysqli_num_rows($select_banner) > 0){
+                                while($row = mysqli_fetch_assoc($select_banner)){
+                            ?>
+
+                            <tr>
+                                <td><?php echo $row['name']; ?></td>
+                                <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
+                                <td>
+                                <a href="admin.php?delete_banner=<?php echo $row['id']; ?>" class="delete-btn btn btn-danger" onclick="return confirm('are your sure you want to delete this?');"> <i class="fas fa-trash"></i>Delete</a>
+                                </td>
+                            </tr>
+
+                            <?php
+                                };    
+                                }else{
+                                echo "<div class='empty'>no product added</div>";
+                                };
+                            ?>
+                        </tbody>
+                    </table>
+
+                    </section>
+                    </div>
                     </div>
                   </section>
               </div>
@@ -347,9 +531,12 @@ if(isset($message)){
                 <th>User Image</th>
                 <th>Username</th>
                 <th>Email</th>
-                <th>Password</th>
                 <th>Role</th>
-                <th colspan=2>Actions</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Address</th>
+                <th>Mobile No</th>
+                <th>Actions</th>
                 </tr>
             </thead>
            
@@ -368,11 +555,14 @@ if(isset($message)){
                      <td><img src="uploaded_img/<?php echo $row['image']; ?>" height="100" alt=""></td>
                      <td><?php echo $row['username']; ?></td>
                      <td><?php echo $row['email']; ?></td>
-                     <td><?php echo $row['password']; ?></td>
                      <td><?php echo $row['role']; ?></td>
-                     <td>
-                        <a href="admin.php?deleteReg=<?php echo $row['id']; ?>" class="delete-btn btn btn-danger" onclick="return confirm('are your sure you want to delete this?');"> <i class="fas fa-trash"></i>Delete</a>
-                        <a href="admin.php?edit_user=<?php echo $row['id']; ?>" class="option-btn btn btn-warning"> <i class="fas fa-edit"></i>Update</a>
+                     <td><?php echo $row['firstname']; ?></td>
+                     <td><?php echo $row['lastname']; ?></td>
+                     <td><?php echo $row['address']; ?></td>
+                     <td><?php echo $row['mobileNo']; ?></td>
+                     <td colspan=2>
+                        <a href="admin.php?delete_user=<?php echo $row['id']; ?>" class="delete-btn btn btn-danger pe-4 mb-2" onclick="return confirm('are your sure you want to delete this?');"> <i class="fas fa-trash"></i>Delete</a>
+                        <a href="admin.php?edit_user=<?php echo $row['id']; ?>" class="option-btn btn btn-warning pe-3"> <i class="fas fa-edit"></i>Update</a>
                      </td>
                   </tr>
          
@@ -402,22 +592,31 @@ if(isset($message)){
       if(mysqli_num_rows($edit_user_query) > 0){
          while($fetch_edit_user = mysqli_fetch_assoc($edit_user_query)){
    ?>
-    <div class="user_update_modal" >
+    <div class="admin_update_modal" >
+    <div class="divScroll">
         <form action="" method="post" enctype="multipart/form-data">
            <img src="uploaded_img/<?php echo $fetch_edit_user['image']; ?>" height="200" alt="">
            <input type="hidden" name="update_user_id" value="<?php echo $fetch_edit_user['id']; ?>">
-           <input type="text" class="box" required name="update_username" value="<?php echo $fetch_edit_user['username']; ?>">
-           <input type="text" class="box" required name="update_email" value="<?php echo $fetch_edit_user['email']; ?>">
-           <input type="text" class="box" required name="update_password" value="<?php echo $fetch_edit_user['password']; ?>">
-           <label class="d-flex justify-content-start" for="role">Role:</label>
-                <select class="d-flex justify-content-start" name="update_role" id="role">
-                    <option value="admin">Admin</option>
-                    <option value="user">User</option>
-                </select>
-           
-           <input type="submit" value="update the user" name="update_users" class="btn btn-warning">
-           <input type="reset" name="cancel" value="cancel" id="close-edit" class="option-btn btn btn-danger" onclick="document.querySelector('.edit-form-containers').style.display = 'none';">
+           <br>
+           <br>
+           <label for="username">Username:</label> 
+           <input type="text" class="box" required name="update_username" id='username' value="<?php echo $fetch_edit_user['username'];?>">
+           <label for="email">Email:</label> 
+           <input type="text" class="box" required name="update_email" id='email'value="<?php echo $fetch_edit_user['email']; ?>">
+           <label for="password">First Name:</label> 
+           <input type="text" class="box" required name="firstname_update" id='firstname'value="<?php echo $fetch_edit_user['firstname']; ?>">
+           <label for="password">Last Name:</label> 
+           <input type="text" class="box" required name="lastname_update" id='lastname'value="<?php echo $fetch_edit_user['lastname']; ?>">
+           <label for="password">Address:</label> 
+           <input type="text" class="box" required name="address_update" id='address'value="<?php echo $fetch_edit_user['address']; ?>">
+           <label for="password">Mobile No:</label> 
+           <input type="text" class="box" required name="mobileNo_update" id='mobileNo'value="<?php echo $fetch_edit_user['mobileNo']; ?>">
+           <input type="file" class="box" name="update_user_image" required accept="image/png, image/jpg, image/jpeg">
+     
+           <input type="submit" value="Update" name="update_users" class="btn btn-warning">
+           <input type="reset" name="cancel" value="Cancel" id="close-edit" class="option-btn btn btn-danger" onclick="document.querySelector('.edit-form-containers').style.display = 'none';">
         </form>
+         </div>
     </div>
 
    <?php
@@ -430,20 +629,11 @@ if(isset($message)){
         echo "<script>document.querySelector('.edit-form-containers').style.display = 'none';</script>";
       }
 
-      
-   ?>
+       ?>
 
 </section>
-
-
-  <!-- modal user end-->
-
-
-
-
-
-
-
+<!-- modal user end-->
+</div>
 </div>
               </section>
           </div>
@@ -622,16 +812,166 @@ if(isset($message)){
             </section>
           </div>    
         </div>
+
+        <!-- SUCCESFUL TRANSACTIONS -->
+        <div id="add_admin" class="tabcontent">
+          <div class="row">
+            <section class="">
+              <div class="container">
+              <div class="mb-4">
+                    <span class="h3 mb-4"></span>
+              </div>
+              <div class="container mb-5">
+                    <div class="atitle py-4 ms-3">
+                        <h2>Add Admin Account</h2>
+                    </div>
+                    <div class="col-lg-12">
+                        <form class="" action="" method="post">
+                            <div class="d-flex flex-row align-items-center ">
+                            <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                                <input type="text" id="username" name="username" class="form-control mb-3" placeholder="Username"/>
+                            </div>
+                            </div>
+
+                            <div class="d-flex flex-row align-items-center">
+                            <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                                <input type="email" id="email" name="email" class="form-control mb-3" placeholder="Email" />
+                            </div>
+                            </div>
+
+                            <div class="d-flex flex-row align-items-center">
+                            <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                                <input type="text" id="First Name" name="firstname" class="form-control mb-3" placeholder="First Name" />
+                            </div>
+                            </div>
+
+                            <div class="d-flex flex-row align-items-center ">
+                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                                <input type="text" id="Last Name" name="lastname" class="form-control mb-3" placeholder="Last Name" />
+                            </div>
+                            </div>
+
+                            <div class="d-flex flex-row align-items-center ">
+                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                                <input type="password" id="password" name="password" class="form-control mb-3" placeholder="Password" />
+                            </div>
+                            </div>
+
+                            <div class="d-flex flex-row align-items-center ">
+                            <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                            <div class="form-outline flex-fill mb-0">
+                                <input type="password" id="confirm password" name="cpassword" class="form-control mb-3" placeholder="Confirm Password" />
+                            </div>
+                            </div>
+
+                            <div class="form-check d-flex justify-content-center me-3 mb-3">
+                            <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" required />
+                            <label class="form-check-label" for="form2Example3">
+                            I agree all statements in <a href="#!">Terms and Condition</a>
+                            </label>
+                            </div>
+
+                            <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                            <input type="submit" name="submit" class="btn btn-primary btn-lg"></input>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+              </div>
+            </section>
+          </div>    
+        </div>
         </div>
     </div>
 </div>    
-
-
 <!-- SUCCESFUL TRANSACTIONS END -->
 
 
 
 <!--TABBED CONTENT END -->
+
+            <!-- Top Selling -->
+            <div class="container col-12">
+              <div class="card top-selling overflow-auto">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body pb-0">
+                  <h5 class="card-title">Top Selling <span>| Today</span></h5>
+
+                  <table class="table table-borderless">
+                    <thead>
+                      <tr>
+                        <th scope="col">Preview</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Sold</th>
+                        <th scope="col">Revenue</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-1.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Ut inventore ipsa voluptas nulla</a></td>
+                        <td>$64</td>
+                        <td class="fw-bold">124</td>
+                        <td>$5,828</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-2.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Exercitationem similique doloremque</a></td>
+                        <td>$46</td>
+                        <td class="fw-bold">98</td>
+                        <td>$4,508</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-3.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Doloribus nisi exercitationem</a></td>
+                        <td>$59</td>
+                        <td class="fw-bold">74</td>
+                        <td>$4,366</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-4.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Officiis quaerat sint rerum error</a></td>
+                        <td>$32</td>
+                        <td class="fw-bold">63</td>
+                        <td>$2,016</td>
+                      </tr>
+                      <tr>
+                        <th scope="row"><a href="#"><img src="assets/img/product-5.jpg" alt=""></a></th>
+                        <td><a href="#" class="text-primary fw-bold">Sit unde debitis delectus repellendus</a></td>
+                        <td>$79</td>
+                        <td class="fw-bold">41</td>
+                        <td>$3,239</td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                </div>
+
+              </div>
+            </div><!-- End Top Selling -->
+
+          </div>
+        </div><!-- End Left side columns -->
 
 
 

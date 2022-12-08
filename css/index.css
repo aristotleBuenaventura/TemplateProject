@@ -233,6 +233,7 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  z-index: 100;
 }
 
 .dropdown-content {
@@ -241,7 +242,7 @@
   background-color: #f1f1f1;
   min-width: 160px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  z-index: 10;
+  z-index: 100;
 }
 
 .dropdown-content a {
@@ -249,6 +250,7 @@
   padding: 12px 16px;
   text-decoration: none;
   display: block;
+  z-index: 100;
 }
 
 
@@ -275,8 +277,8 @@
 /* CSS */
 .button-27 {
   appearance: none;
-  background-color: #000000;
-  border: 2px solid #1A1A1A;
+  background-color: #dc3545;
+  border: 2px solid #88232d;
   border-radius: 15px;
   box-sizing: border-box;
   color: #FFFFFF;
@@ -486,4 +488,98 @@
 .payment_area {
   border-top: 1px solid #eee;
 }
+
+.alink {
+  text-decoration: none;
+}
+
+ol.progtrckr {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+ol.progtrckr li {
+  display: inline-block;
+  text-align: center;
+  line-height: 3.5em;
+}
+
+ol.progtrckr[data-progtrckr-steps="2"] li { width: 49%; }
+ol.progtrckr[data-progtrckr-steps="3"] li { width: 33%; }
+ol.progtrckr[data-progtrckr-steps="4"] li { width: 24%; }
+ol.progtrckr[data-progtrckr-steps="5"] li { width: 19%; }
+ol.progtrckr[data-progtrckr-steps="6"] li { width: 16%; }
+ol.progtrckr[data-progtrckr-steps="7"] li { width: 14%; }
+ol.progtrckr[data-progtrckr-steps="8"] li { width: 12%; }
+ol.progtrckr[data-progtrckr-steps="9"] li { width: 11%; }
+
+ol.progtrckr li.progtrckr-done {
+  color: black;
+  border-bottom: 4px solid yellowgreen;
+}
+ol.progtrckr li.progtrckr-todo {
+  color: silver; 
+  border-bottom: 4px solid silver;
+}
+
+ol.progtrckr li:after {
+  content: "\00a0\00a0";
+}
+ol.progtrckr li:before {
+  position: relative;
+  bottom: -2.5em;
+  float: left;
+  left: 50%;
+  line-height: 1em;
+}
+ol.progtrckr li.progtrckr-done:before {
+  content: "\2713";
+  color: white;
+  background-color: yellowgreen;
+  height: 2.2em;
+  width: 2.2em;
+  line-height: 2.2em;
+  border: none;
+  border-radius: 2.2em;
+}
+ol.progtrckr li.progtrckr-todo:before {
+  content: "\039F";
+  color: silver;
+  background-color: white;
+  font-size: 2.2em;
+  bottom: -1.2em;
+}
+
+
+.loginImage{
+  height: 400px;
+}
+
+.signUpImage{
+  height: 450px;
+}
+
+
+.pagination > li > a:focus,
+.pagination > li > a:hover {
+    z-index: 3;
+    color: white;
+    background-color: #f85868;
+    border-color: black;
+}
+
+.pagination > li > a{
+    color: black;
+    border-color: black;
+}
+
+.pagination > .active > a
+{
+    color: white;
+    background-color: #dc3545 !Important;
+    border: 1px solid black !Important;
+}
+
+
 

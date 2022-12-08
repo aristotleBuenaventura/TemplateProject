@@ -17,8 +17,8 @@
         <div class="col col-12 col-lg-4  mt-5 mb-5">
           <h6>Resources</h6>
           <ul class="nav flex-column">
-            <li><a href="#">Terms and Conditions</a></li>
-            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="terms_conditions.php">Terms and Conditions</a></li>
+            <li><a href="privacy.php">Privacy Policy</a></li>
             <li><a href="#">Support</a></li>
             <li><a href="#">Payment</a></li>
             <li><a href="#">Delivery</a></li>

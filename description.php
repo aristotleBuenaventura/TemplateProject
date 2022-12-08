@@ -78,10 +78,10 @@ if(isset($_POST['add_to_cart'])){
 
   if (isset($_SESSION['email'])){ 
       if(mysqli_num_rows($select_cart) > 0){
-         $message[] = 'product already added to cart';
+         $message[] = 'Failed';
       }else{
          $insert_product = mysqli_query($conn, "INSERT INTO `cart`(name, price, image, quantity, email, payment) VALUES('$product_name', '$product_price', '$product_image', '$product_quantity','$email','Unpaid')");
-         $message[] = 'product added to cart succesfully';
+         $message[] = 'Success';
       }
   } else {
    ?>
@@ -113,7 +113,15 @@ if(isset($_POST['add_to_cart'])){
 <?php
   if(isset($message)){
     foreach($message as $message){
-        echo '<div class="message"><span>'.$message.'</span> <i class="fas fa-times" onclick="this.parentElement.style.display = `none`;"></i> </div>';
+        if($message == 'Failed'){
+          echo '<div class="container alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Failed!</strong> The Product is already added to the cart. Please Click the Cart Icon.<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>';
+        } else if ($message == 'Success'){
+          echo '<div class="container alert alert-success alert-dismissible fade show" role="alert">
+          <strong>Success!</strong> The Product is successfuly added to the cart. Please Click the Cart Icon. <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>';
+        }
     };
   };
 ?>
